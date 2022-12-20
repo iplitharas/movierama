@@ -11,6 +11,8 @@ django = "4.1.4"
 djangorestframework = "^3.14.0"
 markdown = "^3.4.1"
 django-filter = "^22.1"
+psycopg2-binary = "2.9.5"
+django-extensions = "^3.2.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -21,6 +23,7 @@ pylint = "^2.15.9"
 pre-commit = "^2.20.0"
 bandit = "^1.7.4"
 pylint-django = "^2.5.3"
+pytest-django = "^4.5.2"
 
 [build-system]
 requires = ["poetry-core"]

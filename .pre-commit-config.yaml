@@ -6,7 +6,6 @@ repos:
         # Optional, if specified, hook will work only on these branches
         # otherwise it will work on all branches
         args: ["--branches", "main", "other_branch"]
-    -   id: check-unapplied-migrations
     -   id: check-absent-migrations
     -   id: po-location-format
         # Mandatory, select one of the following options:
