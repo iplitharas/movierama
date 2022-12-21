@@ -13,6 +13,11 @@ markdown = "^3.4.1"
 django-filter = "^22.1"
 psycopg2-binary = "2.9.5"
 django-extensions = "^3.2.1"
+dj-rest-auth = "^2.2.5"
+django-allauth = "^0.51.0"
+pyyaml = "^6.0"
+uritemplate = "^4.1.1"
+drf-yasg = "^1.21.4"
 
 
 [tool.poetry.group.dev.dependencies]
