@@ -1,0 +1,20 @@
+{% extends 'movies/base.html' %}
+{% block title %} Login {% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+<h1> Login page</h1>
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+    <div class="form-outline mb-4">
+  </div>
+  {{ form.username|as_crispy_field }}
+  {{ form.password|as_crispy_field }}
+   <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+</form>
+{% endblock content %}
+
+
+
+
+
+

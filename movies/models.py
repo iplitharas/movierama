@@ -1,11 +1,11 @@
 from django.db import models
 
+from config import settings
 from movies.movie_manager import MovieManager
-from django.contrib.auth.models import User
 
-# Create your models here.
+
 class Movie(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(
         verbose_name="Movie Title", max_length=255, help_text="Title of the movie"
     )
@@ -23,8 +23,6 @@ class Movie(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    likes = models.IntegerField(help_text="Number of likes")
-    dislikes = models.IntegerField(help_text="Number of dislikes")
     objects = MovieManager()
 
     def __str__(self) -> str:

@@ -1,0 +1,53 @@
+{% extends 'movies/base.html' %}
+{% block title %} Home {% endblock title %}
+{% block content %}
+<h1>MovieRama</h1>
+
+<ul class="nav justify-content-end">
+    {% if user.is_authenticated %}
+       <li class="nav-item ">
+          <a class="nav-link" href="{% url 'new-movie' %}">New Movie</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+      </li>
+    {% else %}
+ <li class="nav-item">
+    <a class="nav-link" href="{% url 'login' %}">Login</a>
+  </li>
+    <li class="nav-item">
+     <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+    </li>
+    {% endif %}
+</ul>
+
+
+<div class="container">
+  <div class="row mt-4">
+      {% for movie in movies %}
+      <div class="col-sm-3">
+             <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{movie.title}}</h5>
+                    <h6 class="card-subtitle">Posted by {{movie.author}} </h6>
+                    <p class="card-body">{{movie.desc}}</p>
+                    {% if user.is_authenticated %}
+                    <a href="#" class="card-subtitle btn btn-warning">Edit</a>
+                    <a href="#" class="card-link bi-hand-thumbs-up"></a>
+                    <a href="#" class="card-link bi-hand-thumbs-down"></a>
+                    {% endif %}
+                </div>
+            </div>
+      </div>
+      {% endfor %}
+
+</div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock content %}

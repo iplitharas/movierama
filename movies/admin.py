@@ -10,9 +10,7 @@ class MovieAdmin(admin.ModelAdmin):
         "year",
         "created_date",
         "updated_date",
-        "likes",
         "author",
-        "dislikes",
     )
     list_display = (
         "title",
@@ -20,9 +18,7 @@ class MovieAdmin(admin.ModelAdmin):
         "year",
         "created_date",
         "updated_date",
-        "likes",
         "author",
-        "dislikes",
     )
     readonly_fields = (
         "created_date",

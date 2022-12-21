@@ -25,18 +25,21 @@ schema_view = get_schema_view(
         description="API for movies",
         default_version="v1",
         contact=openapi.Contact(email="johnplitharas@gmail.com"),
-        license=openapi.License(name="BSD License")
+        license=openapi.License(name="BSD License"),
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
-
 )
 
 from .views import FacebookLogin, GithubLogin
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("movies.urls")),
+    # use build-in django auth urls
+
+    path("", include("web_app.urls")),
+    path("api/", include("api.urls")),
+    path("accounts/", include("accounts.urls")),
     # Adds login/logout at rest-framework page
     path("api-auth/", include("rest_framework.urls")),
     # add login/logout from dj-rest-auth
