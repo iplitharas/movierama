@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     # Generate the tokens
     "rest_framework.authtoken",
     "dj_rest_auth",
-    # django-allauth
+    # "django-allauth",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",

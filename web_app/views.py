@@ -7,6 +7,7 @@ Web-app views using the `Movie` model for:
 5) add likes to a movie review: `like_movie`
 6) add dislikes to a movie review: `dislike_movie`
 """
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
@@ -62,7 +63,9 @@ class HomePageView(generic.ListView):
 
         if self.request.GET.get("author"):
             author_id = self.request.GET.get("author")
-            movies = self.queryset.by_author(author= CustomUser.objects.get(id=author_id))
+            movies = self.queryset.by_author(
+                author=CustomUser.objects.get(id=author_id)
+            )
 
         data = []
         for movie in movies:
@@ -93,6 +96,7 @@ class HomePageView(generic.ListView):
         return context
 
 
+@login_required(login_url="/accounts/login/")
 def new_movie(request: HttpRequest) -> HttpResponse:
     """
     Function handler for creating a new movie review.
@@ -117,6 +121,7 @@ def new_movie(request: HttpRequest) -> HttpResponse:
 
 
 # pylint: disable=redefined-builtin,invalid-name
+@login_required(login_url="/accounts/login/")
 def update_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     Function handler for updating a movie review.
@@ -150,6 +155,7 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
 
 
 # pylint: disable=redefined-builtin,invalid-name
+@login_required(login_url="/accounts/login/")
 def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     Function handler for deleting a movie review.
@@ -162,7 +168,7 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
 
     return render(request, "movies/delete.html", context)
 
-
+@login_required(login_url="/accounts/login/")
 def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     Like function view for handling likes from users for one movie.
@@ -189,7 +195,7 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     # go to home page in any case
     return redirect("home")
 
-
+@login_required(login_url="/accounts/login/")
 def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     Dislike function view for handling dislikes from users for one movie.
