@@ -13,6 +13,18 @@ from .forms import MovieForm
 from accounts.models import CustomUser
 
 
+from dataclasses import dataclass
+
+
+@dataclass
+class TemplateData:
+    movie: Movie = None
+    allow_edit: bool = False
+    allow_delete: bool = False
+    allow_like: bool = False
+    allow_dislike: bool = False
+
+
 class HomePageView(generic.ListView):
     """
     Class based view for listing all movie reviews.
@@ -29,34 +41,42 @@ class HomePageView(generic.ListView):
         """
 
         context = super().get_context_data(**kwargs)
+        # First, specify the movies query set
+        movies = self.queryset.all().order_by("id")
         if self.request.GET.get("filter") == "date":
-            context["movies"] = self.queryset.all().order_by("created_date")
-            return context
+            movies = self.queryset.all().order_by("created_date")
+
         if self.request.GET.get("filter") == "published_date":
-            context["movies"] = self.queryset.all().order_by("year")
-            return context
+            movies = self.queryset.all().order_by("year")
+
         if self.request.GET.get("filter") == "by_user":
-            context["movies"] = self.queryset.all().filter(author=self.request.user)
-            return context
+            movies = self.queryset.all().filter(author=self.request.user)
 
-        context["movies"] = self.queryset.all().order_by("id")
-
-        can_like = []
-        for movie in self.queryset.all().order_by("id"):
+        data = []
+        for movie in movies:
+            temp_data = TemplateData()
+            temp_data.movie = movie
+            data.append(temp_data)
             # author users can't like their own movie reviews
             if movie.author.id == self.request.user.id:
                 # users can't add reaction on their movie reviws
-                can_like.append(tuple())
+                temp_data.allow_edit = True
+                temp_data.allow_delete = True
+                # like/dislike
+                temp_data.allow_like = None
+                temp_data.allow_dislike = None
             # user has already liked the movie
             elif self.request.user in movie.likes.all():
-                can_like.append((False, True))
+                temp_data.allow_like = False
+                temp_data.allow_dislike = True
             # user has already dis-liked the movie
             elif self.request.user in movie.dislikes.all():
-                can_like.append((True, False))
+                temp_data.allow_like = True
+                temp_data.allow_dislike = False
             else:
                 # user hasn't liked or dislike the movie
-                can_like.append((True, True))
-        data = zip(context["movies"], can_like)
+                temp_data.allow_like = True
+                temp_data.allow_dislike = True
         context["data"] = data
         return context
 
@@ -133,7 +153,7 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
 
 def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
-    Function handler for handling likes from users for one movie.
+    Like function view for handling likes from users for one movie.
     """
     movie = get_object_or_404(Movie, id=id)
     if request.method == "POST":
@@ -160,14 +180,12 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
 
 def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
-    Function handler for handling dislikes from users for one movie.
+    Dislike function view for handling dislikes from users for one movie.
     """
     movie = get_object_or_404(Movie, id=id)
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
-            # Many-to-Many it's a set
-            # no duplicates
             if user.first() in movie.dislikes.all():
                 movie.dislikes.remove(user.first())
                 return redirect("home")
