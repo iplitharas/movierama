@@ -168,6 +168,7 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
 
     return render(request, "movies/delete.html", context)
 
+
 @login_required(login_url="/accounts/login/")
 def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
@@ -194,6 +195,7 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
             movie.save()
     # go to home page in any case
     return redirect("home")
+
 
 @login_required(login_url="/accounts/login/")
 def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
