@@ -2,6 +2,7 @@
 {% block title %} Login {% endblock title %}
 {% block content %}
 {% load crispy_forms_tags %}
+{% include 'movies/nav-bar.html' %}
 <section class="vh-100" style="background-color: #eee;">
   <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -15,8 +16,9 @@
                    {% csrf_token %}
                     {{ form.username|as_crispy_field}}
                     {{ form.password|as_crispy_field}}
+                  <br/>
                   <div class="d-flex justify-content-center mx-5 mb5-m mb-lg-3 " >
-                    <button type="button " class="btn btn-success btn-block btn-lg">Login</button>
+                    <button type="button " class="btn btn-success btn-block btn-sm">Login</button>
                   </div>
                 </form>
               </div>

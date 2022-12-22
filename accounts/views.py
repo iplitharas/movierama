@@ -3,6 +3,7 @@ from django.views import generic
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 
+
 class SignUpPageView(generic.CreateView):
     form_class = CustomUserCreationForm
     model = CustomUser
