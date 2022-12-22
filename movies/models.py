@@ -21,6 +21,19 @@ class Movie(models.Model):
     year = models.CharField(
         verbose_name="Published Year", max_length=4, help_text="Date of publication"
     )
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="movie_likes",
+        verbose_name="Users who liked this a movie",
+        help_text="Many user can like this movie and this movie can be liked from different users",
+    )
+    dislikes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="movie_dislikes",
+        verbose_name="Users who don't this a movie",
+        help_text="Many user can dislike this movie and this movie can be disliked from different users",
+    )
+
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     cover = models.ImageField(
@@ -33,3 +46,14 @@ class Movie(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title}"
+
+    @property
+    def total_likes(self) -> int:
+        return self.likes.count()
+
+    @property
+    def total_dislikes(self) -> int:
+        return self.dislikes.count()
+
+
+

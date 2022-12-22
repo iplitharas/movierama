@@ -1,5 +1,5 @@
 """
-Web app views using the `Movie` model for
+Web-app  views using the `Movie` model for:
 1) listing all the existing movie reviews: `HomePageView`
 2) creating a new movie review: `new_movie`
 3) updating a movie review: `update_movie`
@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from movies.models import Movie
 from .forms import MovieForm
+from accounts.models import CustomUser
 
 
 class HomePageView(generic.ListView):
@@ -39,6 +40,23 @@ class HomePageView(generic.ListView):
             return context
 
         context["movies"] = self.queryset.all().order_by("id")
+
+        can_like = []
+        for movie in self.queryset.all().order_by("id"):
+            # author users can't like their own movie reviews
+            if movie.author.id == self.request.user.id:
+                can_like.append((False, False))
+            # user has already liked the movie
+            elif self.request.user in movie.likes.all():
+                can_like.append((False, True))
+            # user has already dis-liked the movie
+            elif self.request.user in movie.dislikes.all():
+                can_like.append((True, False))
+            else:
+                # user hasn't liked or dislike the movie
+                can_like.append((True, True))
+        data = zip(context["movies"], can_like)
+        context["data"] = data
         return context
 
 
@@ -83,7 +101,7 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
                 genre=form.cleaned_data["genre"],
                 year=form.cleaned_data["year"],
             )
-            if request.FILES["cover"]:
+            if request.FILES.get("cover"):
                 movie = Movie.objects.get(id=instance.id)
                 movie.cover = request.FILES["cover"]
                 movie.save()
@@ -104,12 +122,45 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
     Function handler for deleting a movie review.
     """
     context = {"id": id}
-    # fetch the object related to passed id
     obj = get_object_or_404(Movie, id=id)
-
     if request.method == "POST":
         obj.delete()
-
         return redirect("home")
 
     return render(request, "movies/delete.html", context)
+
+
+def like_movie(request: HttpRequest, id: int) -> HttpResponse:
+    """
+    Function handler for handling likes from users for one movie.
+    """
+    movie = get_object_or_404(Movie, id=id)
+    if request.method == "POST":
+        user = CustomUser.objects.filter(pk=request.user.id)
+        if user.exists():
+            # Many-to-Many it's a set
+            # no duplicates
+            movie.likes.add(user.first())
+            movie.save()
+            if user.first() in movie.dislikes.all():
+                movie.dislikes.remove(user.first())
+    # go to home page in any case
+    return redirect("home")
+
+
+def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
+    """
+    Function handler for handling dislikes from users for one movie.
+    """
+    movie = get_object_or_404(Movie, id=id)
+    if request.method == "POST":
+        user = CustomUser.objects.filter(pk=request.user.id)
+        if user.exists():
+            # Many-to-Many it's a set
+            # no duplicates
+            movie.dislikes.add(user.first())
+            if user.first() in movie.likes.all():
+                movie.likes.remove(user.first())
+            movie.save()
+    # go to home page in any case
+    return redirect("home")
