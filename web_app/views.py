@@ -45,7 +45,8 @@ class HomePageView(generic.ListView):
         for movie in self.queryset.all().order_by("id"):
             # author users can't like their own movie reviews
             if movie.author.id == self.request.user.id:
-                can_like.append((False, False))
+                # users can't add reaction on their movie reviws
+                can_like.append(tuple())
             # user has already liked the movie
             elif self.request.user in movie.likes.all():
                 can_like.append((False, True))
@@ -140,10 +141,19 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
         if user.exists():
             # Many-to-Many it's a set
             # no duplicates
-            movie.likes.add(user.first())
-            movie.save()
+
+            # user liked this movie review
+            # revert it
+            if user.first() in movie.likes.all():
+                movie.likes.remove(user.first())
+                return redirect("home")
+
+            if user.first() not in movie.likes.all():
+                movie.likes.add(user.first())
+
             if user.first() in movie.dislikes.all():
                 movie.dislikes.remove(user.first())
+            movie.save()
     # go to home page in any case
     return redirect("home")
 
@@ -158,7 +168,13 @@ def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
         if user.exists():
             # Many-to-Many it's a set
             # no duplicates
-            movie.dislikes.add(user.first())
+            if user.first() in movie.dislikes.all():
+                movie.dislikes.remove(user.first())
+                return redirect("home")
+
+            if user.first() not in movie.dislikes.all():
+                movie.dislikes.add(user.first())
+
             if user.first() in movie.likes.all():
                 movie.likes.remove(user.first())
             movie.save()

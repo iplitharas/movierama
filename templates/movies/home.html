@@ -62,34 +62,32 @@
                     {% if user.is_authenticated %}
                     <a href="{% url 'update-movie' id=movie.id %}" class="card-subtitle btn btn-warning">Edit</a>
                     <a href="{% url 'delete-movie' id=movie.id %}" class="card-subtitle btn btn-warning">Delete</a>
-
-                    {% if can_like.0  %}
+                    {% if can_like %}
                       <form method="post" action="{% url 'like-movie' id=movie.id %}">
                           {% csrf_token %}
                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="button " class="btn btn-primary btn-lg">Like it <i class="bi bi-hand-thumbs-up"></i></button>
-
-                                    </div></form>
-                    {% endif %}
-                    {% if can_like.1  %}
+                                <button type="button " class="btn btn-primary btn-lg">
+                                      {% if can_like.0  %}
+                                        Like it <i class="bi bi-hand-thumbs-up"></i>
+                                      {% else %}
+                                             Liked it
+                                      {% endif %}
+                                </button>
+                                    </div>
+                      </form>
                     <form method="post" action="{% url 'dislike-movie' id=movie.id %}">
                           {% csrf_token %}
                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="button " class="btn btn-primary btn-lg">Dislike it<i class="bi bi-hand-thumbs-down"></i></button>
-                                    </div></form>
-                    {% endif%}
-                    {% if not can_like.0 and not can_like.1 %}
-                     <form method="post" action="{% url 'dislike-movie' id=movie.id %}">
-                          {% csrf_token %}
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="button " class="btn btn-primary btn-lg">Dislike it</button>
-                                    </div></form>
-                     <form method="post" action="{% url 'like-movie' id=movie.id %}">
-                          {% csrf_token %}
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="button " class="btn btn-primary btn-lg">Like it</button>
+                                <button type="button " class="btn btn-primary btn-lg">
+                                     {% if can_like.1  %}
+                                    Dislike it<i class="bi bi-hand-thumbs-down"></i>
+                                     {% else %}
+                                     Disliked
+                                    {% endif %}
+                                </button>
                                     </div></form>
                     {% endif %}
+
                     {% endif %}
                 </div>
             </div>
