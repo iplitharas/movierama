@@ -20,7 +20,7 @@
                      {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{template_data.movie.title}}</h5>
-                        <h6 class="card-subtitle">by {{template_data.movie.author.username|title}} -  {{template_data.movie.created_date|timesince}} ago</h6>
+                        <h6 class="card-subtitle">By: <a href="{% url 'home' %}?author={{ template_data.movie.author.id }}">{{template_data.movie.author.username|title}}</a> -  {{template_data.movie.created_date|timesince}} ago</h6>
                         <p class="card-text">{{template_data.movie.desc}}</p>
                         <p class="card-text"><strong>Released</strong>: {{template_data.movie.year}}</p>
                         <p class="card-tsext"><strong>Likes:</strong> {{template_data.movie.total_likes}}</p>

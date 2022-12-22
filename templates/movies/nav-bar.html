@@ -9,11 +9,11 @@
     <a class="nav-link" href="{% url 'home' %}?filter=likes">Sort by likes</a>
   </li>
   <li class="nav-item">
-  <a class="nav-link" href="{% url 'home' %}?filter=likes">Sort by dislikes</a>
+  <a class="nav-link" href="{% url 'home' %}?filter=dislikes">Sort by dislikes</a>
   </li>
     {% if user.is_authenticated %}
           <li class="nav-item">
-                 <a class="nav-link" href="{% url 'home' %}?filter=by_user">Your Movies</a>
+                 <a class="nav-link" href="{% url 'home' %}?filter=by_current_user">Your Movies</a>
           </li>
      {% endif %}
 </ul>

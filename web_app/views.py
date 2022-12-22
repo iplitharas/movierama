@@ -49,10 +49,20 @@ class HomePageView(generic.ListView):
             movies = self.queryset.all().order_by("created_date")
 
         if self.request.GET.get("filter") == "published_date":
-            movies = self.queryset.all().order_by("year")
+            movies = self.queryset.by_published_date()
 
-        if self.request.GET.get("filter") == "by_user":
-            movies = self.queryset.all().filter(author=self.request.user)
+        if self.request.GET.get("filter") == "likes":
+            movies = self.queryset.by_likes()
+
+        if self.request.GET.get("filter") == "dislikes":
+            movies = self.queryset.by_dislikes()
+
+        if self.request.GET.get("filter") == "by_current_user":
+            movies = self.queryset.by_author(author=self.request.user)
+
+        if self.request.GET.get("author"):
+            author_id = self.request.GET.get("author")
+            movies = self.queryset.by_author(author= CustomUser.objects.get(id=author_id))
 
         data = []
         for movie in movies:
