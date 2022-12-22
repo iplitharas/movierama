@@ -1,110 +1,72 @@
 {% extends 'movies/base.html' %}
 {% block title %} Home {% endblock title %}
+
 {% block content %}
 <h1>MovieRama</h1>
 
-<ul class="nav justify-content-end">
-    {% if user.is_authenticated %}
-
-       <li class="nav-item ">
-          <a class="nav-link" href="{% url 'new-movie' %}">New Movie</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">{{user.username}} <br/> logout</a>
-      </li>
-    {% else %}
- <li class="nav-item">
-    <a class="nav-link" href="{% url 'login' %}">Login</a>
-  </li>
-    <li class="nav-item">
-     <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-    </li>
-    {% endif %}
-</ul>
-
-<ul class="nav nav-tabs">
-      <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Home</a>
-    </li>
-  <li class="nav-item">
-  <a class="nav-link" href="{% url 'home' %}?filter=published_date">Sort By Published date</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'home' %}?filter=likes">Sort by likes</a>
-  </li>
-  <li class="nav-item">
-  <a class="nav-link" href="{% url 'home' %}?filter=likes">Sort by dislikes</a>
-  </li>
-    {% if user.is_authenticated %}
-          <li class="nav-item">
-                 <a class="nav-link" href="{% url 'home' %}?filter=by_user">Your Movies</a>
-          </li>
-     {% endif %}
-</ul>
-
-
+{% include 'movies/nav-login-logout.html' %}
+{% include 'movies/nav-bar.html' %}
 
 <div class="container">
   <div class="row mt-4">
       {% for template_data in data %}
-      <div class="col-sm-3">
-             <div class="card" style="width: 18rem;">
-                 {% if template_data.movie.cover %}
-                <img class="card-img-top" src="{{template_data.movie.cover.url}}" alt="{{template_data.movie.title}}">
-                 {% else %}
-                     {% load static %}
-                  <img class="card-img-top" src="{% static 'images/missing.jpeg' %}" alt="missing cover">
-                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{template_data.movie.title}}</h5>
-                    <h6 class="card-subtitle">by {{template_data.movie.author.username|title}} -  {{template_data.movie.created_date|timesince}} ago</h6>
-                    <p class="card-text">{{template_data.movie.desc}}</p>
-                    <p class="card-text"><strong>Released</strong>: {{template_data.movie.year}}</p>
-                    <p class="card-tsext"><strong>Likes:</strong> {{template_data.movie.total_likes}}</p>
-                    <p class="card-text"><strong>Dislikes:</strong>{{template_data.movie.total_dislikes}}</p>
+          <div class="col-sm-3">
+                 <div class="card" style="width: 18rem;">
+                     {% if template_data.movie.cover %}
+                    <img class="card-img-top" src="{{template_data.movie.cover.url}}" alt="{{template_data.movie.title}}">
+                     {% else %}
+                         {% load static %}
+                      <img class="card-img-top" src="{% static 'images/missing.jpeg' %}" alt="missing cover">
+                     {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{template_data.movie.title}}</h5>
+                        <h6 class="card-subtitle">by {{template_data.movie.author.username|title}} -  {{template_data.movie.created_date|timesince}} ago</h6>
+                        <p class="card-text">{{template_data.movie.desc}}</p>
+                        <p class="card-text"><strong>Released</strong>: {{template_data.movie.year}}</p>
+                        <p class="card-tsext"><strong>Likes:</strong> {{template_data.movie.total_likes}}</p>
+                        <p class="card-text"><strong>Dislikes:</strong>{{template_data.movie.total_dislikes}}</p>
 
-                    {% if user.is_authenticated %}
-                        {% if template_data.allow_edit %}
-                         <a href="{% url 'update-movie' id=template_data.movie.id %}" class="card-subtitle btn btn-warning btn-sm">Edit</a>
-                        {% endif %}
-                        {% if template_data.allow_delete %}
-                            <a href="{% url 'delete-movie' id=template_data.movie.id %}" class="card-subtitle btn btn-warning btn-sm">Delete</a>
-                        {% endif %}
-                        {% if not template_data.allow_edit  %}
+                        {% if user.is_authenticated %}
+                            {% if template_data.allow_edit %}
+                             <a href="{% url 'update-movie' id=template_data.movie.id %}" class="card-subtitle btn btn-warning btn-sm">Edit</a>
+                            {% endif %}
+                            {% if template_data.allow_delete %}
+                                <a href="{% url 'delete-movie' id=template_data.movie.id %}" class="card-subtitle btn btn-warning btn-sm">Delete</a>
+                            {% endif %}
+                            {% if not template_data.allow_edit  %}
 
-                              <form method="post" action="{% url 'like-movie' id=template_data.movie.id %}">
-                                  {% csrf_token %}
-                                        <div class="card-subtitle">
-                                            <button type="button " class="btn btn-outline-primary btn-sm">
-                                                  {% if template_data.allow_like  %}
-                                                        Like it <i class="bi bi-hand-thumbs-up"></i>
-                                                  {% else %}
-                                                         Liked!
-                                                  {% endif %}
-                                            </button>
-                                        </div>
-                              </form>
-                           <br>
-                            <form method="post" action="{% url 'dislike-movie' id=template_data.movie.id %}">
-                                  {% csrf_token %}
-                                        <div class="card-subtitle">
-                                            <button type="button "class="btn btn-outline-primary btn-sm" aria-pressed="true">
-                                                 {% if template_data.allow_dislike  %}
-                                                Dislike it<i class="bi bi-hand-thumbs-down"></i>
-                                                 {% else %}
-                                                 Disliked!
-                                                {% endif %}
-                                            </button>
-                                        </div>
-                            </form>
-                    {% endif %}
-                    {% endif %}
+                                  <form method="post" action="{% url 'like-movie' id=template_data.movie.id %}">
+                                      {% csrf_token %}
+                                            <div class="card-subtitle">
+                                                <button type="button " class="btn btn-outline-primary btn-sm">
+                                                      {% if template_data.allow_like  %}
+                                                            Like it <i class="bi bi-hand-thumbs-up"></i>
+                                                      {% else %}
+                                                             Liked!
+                                                      {% endif %}
+                                                </button>
+                                            </div>
+                                  </form>
+                               <br>
+                                <form method="post" action="{% url 'dislike-movie' id=template_data.movie.id %}">
+                                      {% csrf_token %}
+                                            <div class="card-subtitle">
+                                                <button type="button "class="btn btn-outline-primary btn-sm" aria-pressed="true">
+                                                     {% if template_data.allow_dislike  %}
+                                                    Dislike it<i class="bi bi-hand-thumbs-down"></i>
+                                                     {% else %}
+                                                     Disliked!
+                                                    {% endif %}
+                                                </button>
+                                            </div>
+                                </form>
+                        {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-      </div>
+          </div>
       {% endfor %}
-
-</div>
+    </div>
   </div>
 </div>
 
