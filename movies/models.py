@@ -45,7 +45,7 @@ class Movie(models.Model):
     objects = MovieManager()
 
     def __str__(self) -> str:
-        return f"{self.title}"
+        return f"{self.title} by {self.author.username}"
 
     @property
     def total_likes(self) -> int:

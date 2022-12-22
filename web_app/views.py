@@ -1,9 +1,11 @@
 """
-Web-app  views using the `Movie` model for:
+Web-app views using the `Movie` model for:
 1) listing all the existing movie reviews: `HomePageView`
 2) creating a new movie review: `new_movie`
 3) updating a movie review: `update_movie`
 4) deleting a movie review: `delete_movie`
+5) add likes to a movie review: `like_movie`
+6) add dislikes to a movie review: `dislike_movie`
 """
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
