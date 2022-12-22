@@ -13,15 +13,17 @@
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
                 <form class="mx-1 mx-md-4"  method="post">
                    {% csrf_token %}
-                    {{ form|crispy}}
+                    {{ form.username|as_crispy_field}}
+                    {{ form.password1|as_crispy_field}}
+                    {{ form.password2|as_crispy_field}}
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                     <button type="button " class="btn btn-primary btn-lg">Register</button>
                   </div>
                 </form>
               </div>
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                  class="img-fluid" alt="Sample image">
+                {% load static %}
+                <img src="{% static 'images/pop-corn.jpeg' %}" alt="signup image">
               </div>
             </div>
           </div>

@@ -23,6 +23,12 @@ class Movie(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    cover = models.ImageField(
+        upload_to="covers/",
+        verbose_name="Movie cover image",
+        blank=True,
+        help_text="Optional cover image",
+    )
     objects = MovieManager()
 
     def __str__(self) -> str:
