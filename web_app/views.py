@@ -7,6 +7,7 @@ Web-app views using the `Movie` model for:
 5) add likes to a movie review: `like_movie`
 6) add dislikes to a movie review: `dislike_movie`
 """
+import logging
 from dataclasses import dataclass
 
 from django.contrib.auth.decorators import login_required
@@ -18,6 +19,9 @@ from accounts.models import CustomUser
 from movies.models import Movie
 
 from .forms import MovieForm
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -43,29 +47,39 @@ class HomePageView(generic.ListView):
         """
         Allows custom filtering on the queryset.
         """
-
         context = super().get_context_data(**kwargs)
         # First, specify the movies query set
         movies = self.queryset.all().order_by("id")
+
         if self.request.GET.get("filter") == "date":
+
             movies = self.queryset.all().order_by("created_date")
 
         if self.request.GET.get("filter") == "released_date":
             movies = self.queryset.by_published_date()
+            logger.debug("Filter by `released_date movies` %s" % movies)
 
         if self.request.GET.get("filter") == "likes":
             movies = self.queryset.by_likes()
+            logger.debug("Filter by `likes` %s" % movies)
 
         if self.request.GET.get("filter") == "dislikes":
             movies = self.queryset.by_dislikes()
+            logger.debug("Filter by `dislikes` %s" % movies)
 
         if self.request.GET.get("filter") == "by_current_user":
             movies = self.queryset.by_author(author=self.request.user)
+            logger.debug(
+                "Filter `by_current_user` %s movies %s" % (self.request.user, movies)
+            )
 
         if self.request.GET.get("author"):
             author_id = self.request.GET.get("author")
             movies = self.queryset.by_author(
                 author=CustomUser.objects.get(id=author_id)
+            )
+            logger.debug(
+                "Filter by `author` with id: %s movies %s" % (author_id, movies)
             )
 
         data = []
@@ -113,6 +127,7 @@ def new_movie(request: HttpRequest) -> HttpResponse:
                 year=form.cleaned_data["year"],
                 cover=request.FILES["cover"],
             )
+            logger.info("Successfully created the movie")
             return redirect("home")
 
     form = MovieForm()
@@ -144,7 +159,7 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
                 movie = Movie.objects.get(id=instance.id)
                 movie.cover = request.FILES["cover"]
                 movie.save()
-
+        logger.info("Successfully updated the movie")
         return redirect("home")
 
     form = MovieForm(instance=instance)
@@ -165,6 +180,7 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
     obj = get_object_or_404(Movie, id=id)
     if request.method == "POST":
         obj.delete()
+        logger.info("Successfully deleted the movie")
         return redirect("home")
 
     return render(request, "movies/delete.html", context)
@@ -180,19 +196,28 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
             # Many-to-Many it's a set
-            # no duplicates
-
             # user liked this movie review
             # revert it
             if user.first() in movie.likes.all():
                 movie.likes.remove(user.first())
+                logger.info(
+                    "Reverted like from user: %s for movie %s"
+                    % (request.user.id, movie.id),
+                )
                 return redirect("home")
 
             if user.first() not in movie.likes.all():
                 movie.likes.add(user.first())
-
+                logger.info(
+                    "Added a like from user: %s to movie %s"
+                    % (request.user.id, movie.id),
+                )
             if user.first() in movie.dislikes.all():
                 movie.dislikes.remove(user.first())
+                logger.info(
+                    "User %s likes movie %s, deleted the dislike"
+                    % (request.user.id, movie.id),
+                )
             movie.save()
     # go to home page in any case
     return redirect("home")
@@ -208,14 +233,26 @@ def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
             if user.first() in movie.dislikes.all():
+                logger.info(
+                    "Reverted dislike from user: %s for movie %s"
+                    % (request.user.id, movie.id),
+                )
                 movie.dislikes.remove(user.first())
                 return redirect("home")
 
             if user.first() not in movie.dislikes.all():
+                logger.info(
+                    "Added a dislike from user: %s to movie %s"
+                    % (request.user.id, movie.id),
+                )
                 movie.dislikes.add(user.first())
 
             if user.first() in movie.likes.all():
                 movie.likes.remove(user.first())
+                logger.info(
+                    "User %s dislike movie %s, deleted the like"
+                    % (request.user.id, movie.id),
+                )
             movie.save()
     # go to home page in any case
     return redirect("home")
