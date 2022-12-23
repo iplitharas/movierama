@@ -62,7 +62,7 @@ sample-movies: ## Create sample movies
 install-local:python-env install-hooks sample-movies
 
 test: ## Run pytest locally
-	pytest -vv
+	pytest -vv -p no:warnings --cov=.
 .PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
 make-migrations migrate test test-docker shell_plus create-env install-local\
  sample-data-docker install-hooks

@@ -1,6 +1,7 @@
 import http
 
 import pytest
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 
@@ -43,7 +44,8 @@ def test_home_without_a_user_logged(client):
     """
     Given a testing client
     When I call the `home` page without any user logged in
-    Then I'm expecting the `Login` `Signup` in the content
+    Then I'm expecting the `Login` `Signup` in the content of
+    the home page
     """
     url = reverse("home")
     response = client.get(url)
