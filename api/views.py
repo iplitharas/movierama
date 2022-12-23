@@ -1,9 +1,9 @@
-
+from rest_framework import generics
 
 from movies.models import Movie
-from .serializers import MovieSerializer
-from rest_framework import generics
 from movies.persmissions import IsAuthorOrReadOnly
+
+from .serializers import MovieSerializer
 
 
 class MovieAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -21,5 +21,3 @@ class MovieListAPIList(generics.ListAPIView):
     # permission_classes = permissions.IsAuthenticated
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-
-

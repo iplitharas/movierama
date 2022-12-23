@@ -54,6 +54,3 @@ class Movie(models.Model):
     @property
     def total_dislikes(self) -> int:
         return self.dislikes.count()
-
-
-

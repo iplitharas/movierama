@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, Count
+from django.db.models import Count, F
 
 from accounts.models import CustomUser
 

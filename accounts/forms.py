@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -12,9 +12,8 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
-        for field_name in ('username', 'email', 'password1', 'password2'):
-            self.fields[field_name].help_text = ''
-
+        for field_name in ("username", "email", "password1", "password2"):
+            self.fields[field_name].help_text = ""
 
 
 class CustomUserChangeForm(UserChangeForm):

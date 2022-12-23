@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import HomePageView, new_movie, update_movie, delete_movie, like_movie, dislike_movie
+from .views import (
+    HomePageView,
+    delete_movie,
+    dislike_movie,
+    like_movie,
+    new_movie,
+    update_movie,
+)
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),

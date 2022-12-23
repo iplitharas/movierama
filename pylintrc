@@ -1,7 +1,5 @@
 [FORMAT]
 max-line-length=100
-
-
 load-plugins=
     pylint.extensions.check_elif,
     pylint.extensions.bad_builtin,

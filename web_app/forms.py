@@ -2,6 +2,7 @@
 Movie-model django form
 """
 from django.forms import ModelForm
+
 from movies.models import Movie
 
 

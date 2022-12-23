@@ -12,3 +12,9 @@ repos:
         # file: show only the file path as location
         # never: remove all locations
         args: ["--add-location", "file"]
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.11.2
+  hooks:
+      - id: isort
+        name: isort (python)

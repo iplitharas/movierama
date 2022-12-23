@@ -37,3 +37,11 @@ pytest-cov = "^4.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.isort]
+multi_line_output = 3
+profile = "black"
+line_length = 88
+include_trailing_comma = true
+skip = [".gitignore", ".dockerignore" ,".env", "migrations"]

@@ -7,16 +7,17 @@ Web-app views using the `Movie` model for:
 5) add likes to a movie review: `like_movie`
 6) add dislikes to a movie review: `dislike_movie`
 """
+from dataclasses import dataclass
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
-from movies.models import Movie
-from .forms import MovieForm
+
 from accounts.models import CustomUser
+from movies.models import Movie
 
-
-from dataclasses import dataclass
+from .forms import MovieForm
 
 
 @dataclass

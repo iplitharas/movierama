@@ -1,14 +1,14 @@
 import random
-
-
-from django.core.management.base import BaseCommand
-from movies.models import Movie
-from config.settings import BASE_DIR
-from django.core.files.base import File
-from random import choice
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
+from random import choice
+
 from django.contrib.auth import get_user_model
+from django.core.files.base import File
+from django.core.management.base import BaseCommand
+
+from config.settings import BASE_DIR
+from movies.models import Movie
 
 
 @dataclass
