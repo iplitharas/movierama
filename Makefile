@@ -50,7 +50,7 @@ sample-movies-docker: ## Create sample movies within the running container
 create-env: ## Create python virtual env
 	python -m venv .env && source .env/bin/activate && pip install --upgrade pip
 
-python-env: create-env ## Create and install environment for local dev
+poetry-env: create-env ## Create and install environment for local dev
 	  source .env/bin/activate && poetry install
 
 install-hooks: ## Install hooks
@@ -59,13 +59,19 @@ install-hooks: ## Install hooks
 sample-movies: ## Create sample movies
 	source .env/bin/activate && ./manage.py create_sample_movies
 
-install-local:python-env install-hooks sample-movies
+init-local-database:
+	source .env/bin/activate && ./manage.py makemigrations && ./manage.py migrate
 
-test: ## Run pytest locally
+install-local:poetry-env install-hooks init-local-database sample-movies
+		echo "🚀 Now you can start the local webserver"
+
+test: ## Run locally pytest with coverage
 	pytest -vv -p no:warnings --cov=.
+	echo "🚀🚀"
+
 .PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
 make-migrations migrate test test-docker shell_plus create-env install-local\
- sample-data-docker install-hooks
+ sample-data-docker install-hooks init-local-database
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
