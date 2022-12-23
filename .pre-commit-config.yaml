@@ -24,19 +24,19 @@ repos:
     - id: black
       language_version: python3.8
 
-- repo: local
-  hooks:
-    - id: pylint
-      name: pylint
-      entry: pylint
-      language: system
-      types: [python]
-      args:
-        [
-          "-rn", # Only display messages
-          "--rcfile=pylintrc", # Link to your config file
-          "--load-plugins=pylint.extensions.docparams", # Load an extension
-          "--exit-zero",
-          "--fail-on=F,E",
-          "--load-plugins=pylint_django",
-        ]
+#- repo: local
+#  hooks:
+#    - id: pylint
+#      name: pylint
+#      entry: pylint
+#      language: system
+#      types: [python]
+#      args:
+#        [
+#          "-rn", # Only display messages
+#          "--rcfile=pylintrc", # Link to your config file
+#          "--load-plugins=pylint.extensions.docparams", # Load an extension
+#          "--exit-zero",
+#          "--fail-on=F,E",
+#          "--load-plugins=pylint_django",
+#        ]

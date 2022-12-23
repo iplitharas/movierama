@@ -4,7 +4,6 @@
 
 ##################################################################################
 ############# Docker commands ####################################################
-##################################################################################
 
 build-dev: ## Build dev docker image
 	docker build -f ./Dockerfile --tag web-app:dev .
@@ -29,7 +28,6 @@ db-logs: ## Postgres db logs
 
 ##################################################################################
 ############### DJANGO Docker commands ###########################################
-##################################################################################
 
 makemigrations: ## Run the django makemigrations within the running container
 	docker-compose exec movies-app ./manage.py makemigrations
@@ -55,10 +53,15 @@ create-env: ## Create python virtual env
 install-local: create-env ## Create and install environment for local dev
 	  poetry install
 
+install-hooks: ## Install hooks
+	pre-commit install
+
 sample-movies: ## Create sample movies
 	./manage.py create_sample_movies
 
-.PHONY: help build-dev logs db-logs restart exec dev-up dev-up make-migrations migrate test shell_plus create-env install-local sample-data-docker
+.PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
+make-migrations migrate test shell_plus create-env install-local\
+ sample-data-docker install-hooks
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

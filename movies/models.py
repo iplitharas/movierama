@@ -32,7 +32,8 @@ class Movie(models.Model):
         settings.AUTH_USER_MODEL,
         related_name="movie_dislikes",
         verbose_name="Users who don't this a movie",
-        help_text="Many user can dislike this movie and this movie can be disliked from different users",
+        help_text="Many user can dislike this movie and this movie "
+        "can be disliked from different users",
     )
 
     created_date = models.DateTimeField(auto_now_add=True)
