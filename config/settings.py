@@ -234,5 +234,6 @@ LOGGING = {
             "propagate": True,
         },
         "web_app": {"handlers": ["console", "logfile"], "level": "DEBUG"},
+        "movies": {"handlers": ["console", "logfile"], "level": "DEBUG"},
     },
 }

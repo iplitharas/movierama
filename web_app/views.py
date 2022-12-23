@@ -10,13 +10,14 @@ Web-app views using the `Movie` model for:
 import logging
 from dataclasses import dataclass
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
 from accounts.models import CustomUser
 from movies.models import Movie
+from movies.persmissions import IsAuthorOrReadOnly
 
 from .forms import MovieForm
 
@@ -142,13 +143,15 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     Function handler for updating a movie review.
     """
-    instance = get_object_or_404(Movie, id=id)
+    movie = get_object_or_404(Movie, id=id)
+    if request.user != movie.author:
+        return HttpResponse("Unauthorized", status=401)
     if request.method == "POST":
         form = MovieForm(
-            request.POST, request.FILES, author=request.user, instance=instance
+            request.POST, request.FILES, author=request.user, instance=movie
         )
         if form.is_valid():
-            Movie.objects.filter(id=instance.id).update(
+            Movie.objects.filter(id=movie.id).update(
                 author=form.author,
                 title=form.cleaned_data["title"],
                 desc=form.cleaned_data["desc"],
@@ -156,13 +159,13 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
                 year=form.cleaned_data["year"],
             )
             if request.FILES.get("cover"):
-                movie = Movie.objects.get(id=instance.id)
+                movie = Movie.objects.get(id=movie.id)
                 movie.cover = request.FILES["cover"]
                 movie.save()
         logger.info("Successfully updated the movie")
         return redirect("home")
 
-    form = MovieForm(instance=instance)
+    form = MovieForm(instance=movie)
     return render(
         request=request,
         template_name="movies/edit.html",
@@ -178,6 +181,9 @@ def delete_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     context = {"id": id}
     obj = get_object_or_404(Movie, id=id)
+    if request.user != obj.author:
+        return HttpResponse("Unauthorized", status=401)
+
     if request.method == "POST":
         obj.delete()
         logger.info("Successfully deleted the movie")
@@ -192,6 +198,7 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     Like function view for handling likes from users for one movie.
     """
     movie = get_object_or_404(Movie, id=id)
+
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
