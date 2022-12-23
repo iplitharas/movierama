@@ -1,7 +1,6 @@
 import http
 
 import pytest
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 
@@ -25,11 +24,14 @@ def test_home_with_one_movie(client, fake_user_with_one_movie):
     """
     Given a testing client
     When I call the home page with one user
-    Then I'm expecting the home page with the right title
+    Then I'm expecting the home page with right content
     """
+    # Given 1 user with one movie review
     user, movie = fake_user_with_one_movie
     url = reverse("home")
+    # When I access the homepage
     response = client.get(url)
+    # Then
     assert response.status_code == http.HTTPStatus.OK
     response_content = str(response.content)
     assert movie.title in response_content
@@ -37,6 +39,10 @@ def test_home_with_one_movie(client, fake_user_with_one_movie):
     assert movie.genre not in response_content
     assert movie.year in response_content
     assert user.username.title() in response_content
+    # Make sure that  users can't add
+    # feedback on their movie reviews
+    assert "Like it" not in response_content
+    assert "Dislike it" not in response_content
 
 
 @pytest.mark.django_db
