@@ -50,14 +50,16 @@ sample-movies-docker: ## Create sample movies within the running container
 create-env: ## Create python virtual env
 	python -m venv .env && source .env/bin/activate && pip install --upgrade pip
 
-install-local: create-env ## Create and install environment for local dev
-	  poetry install
+python-env: create-env ## Create and install environment for local dev
+	  source .env/bin/activate && poetry install
 
 install-hooks: ## Install hooks
 	pre-commit install
 
 sample-movies: ## Create sample movies
-	./manage.py create_sample_movies
+	source .env/bin/activate && ./manage.py create_sample_movies
+
+install-local:python-env install-hooks sample-movies
 
 .PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
 make-migrations migrate test shell_plus create-env install-local\
