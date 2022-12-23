@@ -50,7 +50,7 @@ class HomePageView(generic.ListView):
         if self.request.GET.get("filter") == "date":
             movies = self.queryset.all().order_by("created_date")
 
-        if self.request.GET.get("filter") == "published_date":
+        if self.request.GET.get("filter") == "released_date":
             movies = self.queryset.by_published_date()
 
         if self.request.GET.get("filter") == "likes":
