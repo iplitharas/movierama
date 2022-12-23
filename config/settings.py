@@ -195,6 +195,22 @@ LOGGING = {
             "formatter": "standard",
             "level": "DEBUG",
         },
+        "logfile-requests": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "requests.log",
+            "maxBytes": 50000,
+            "backupCount": 2,
+            "formatter": "standard",
+            "level": "DEBUG",
+        },
+        "logfile-db": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "django-db.log",
+            "maxBytes": 5000000,
+            "backupCount": 2,
+            "formatter": "standard",
+            "level": "DEBUG",
+        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
@@ -208,9 +224,14 @@ LOGGING = {
             "level": "WARN",
         },
         "django.db.backends": {
-            "handlers": ["console"],
+            "handlers": ["logfile-db"],
             "level": "DEBUG",
             "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["logfile-requests"],
+            "level": "DEBUG",
+            "propagate": True,
         },
         "web_app": {"handlers": ["console", "logfile"], "level": "DEBUG"},
     },
