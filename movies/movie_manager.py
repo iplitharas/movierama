@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count, F
+from django.db.models import Count
 
 from accounts.models import CustomUser
 
@@ -21,6 +21,8 @@ class MovieQuerySet(models.QuerySet):
 
 
 class MovieManager(models.Manager):
+    """Movie Manager"""
+
     def get_queryset(self):
         return MovieQuerySet(self.model, using=self._db)
 

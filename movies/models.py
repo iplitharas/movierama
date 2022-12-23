@@ -49,8 +49,10 @@ class Movie(models.Model):
 
     @property
     def total_likes(self) -> int:
+        """Returns # of total likes pear movie"""
         return self.likes.count()
 
     @property
     def total_dislikes(self) -> int:
+        """Returns # of total dislikes pear movie"""
         return self.dislikes.count()
