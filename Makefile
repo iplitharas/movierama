@@ -35,7 +35,7 @@ makemigrations: ## Run the django makemigrations within the running container
 migrate: ## Run the django migrate command within the running container
 	docker-compose exec movies-app ./manage.py migrate
 
-test:
+test-docker:
 	docker-compose exec movies-app pytest . -vv
 
 shell_plus: ## Start django shell command within the running container
@@ -61,8 +61,10 @@ sample-movies: ## Create sample movies
 
 install-local:python-env install-hooks sample-movies
 
+test: ## Run pytest locally
+	pytest -vv
 .PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
-make-migrations migrate test shell_plus create-env install-local\
+make-migrations migrate test test-docker shell_plus create-env install-local\
  sample-data-docker install-hooks
 
 help:
