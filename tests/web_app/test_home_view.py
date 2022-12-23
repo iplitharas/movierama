@@ -36,3 +36,18 @@ def test_home_with_one_movie(client, fake_user_with_one_movie):
     assert movie.genre not in response_content
     assert movie.year in response_content
     assert user.username.title() in response_content
+
+
+@pytest.mark.django_db
+def test_home_without_a_user_logged(client):
+    """
+    Given a testing client
+    When I call the `home` page without any user logged in
+    Then I'm expecting the `Login` `Signup` in the content
+    """
+    url = reverse("home")
+    response = client.get(url)
+    assert response.status_code == http.HTTPStatus.OK
+    assert "Login" in str(response.content)
+    assert "Signup" in str(response.content)
+    assert "hi" not in str(response.content)
