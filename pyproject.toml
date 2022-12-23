@@ -6,33 +6,33 @@ authors = ["iplitharas"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-django = "4.1.4"
-djangorestframework = "^3.14.0"
-markdown = "^3.4.1"
-django-filter = "^22.1"
-psycopg2-binary = "2.9.5"
-django-extensions = "^3.2.1"
-dj-rest-auth = "^2.2.5"
-django-allauth = "^0.51.0"
-pyyaml = "^6.0"
-uritemplate = "^4.1.1"
-drf-yasg = "^1.21.4"
-django-crispy-forms = "^1.14.0"
-pylint-django = "^2.5.3"
-pillow = "^9.3.0"
+python = "^3.8"                            # BSD-3
+django = "4.1.4"                           # BSD-3
+djangorestframework = "^3.14.0"            # Encode OSS Ltd.
+markdown = "^3.4.1"                        # BSD-3
+django-filter = "^22.1"                    # BSD-3
+psycopg2-binary = "2.9.5"                  # General Public License
+django-extensions = "^3.2.1"               # MIT
+dj-rest-auth = "^2.2.5"                    # MIT
+django-allauth = "^0.51.0"                 # MIT
+pyyaml = "^6.0"                            # MIT
+uritemplate = "^4.1.1"                     # Apache 2
+drf-yasg = "^1.21.4"                       # BSD-3
+django-crispy-forms = "^1.14.0"            # MIT
+pylint-django = "^2.5.3"                   # GPL-2.0
+pillow = "^9.3.0"                          # HPND
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.0"
-black = "^22.12.0"
-isort = "^5.11.3"
-pylint = "^2.15.9"
-pre-commit = "^2.20.0"
-bandit = "^1.7.4"
-pylint-django = "^2.5.3"
-pytest-django = "^4.5.2"
-pytest-cov = "^4.0.0"
+pytest = "^7.2.0"                           # MI)
+black = "^22.12.0"                          # MIT
+isort = "^5.11.3"                           # MIT
+pylint = "^2.15.9"                          # General Public License
+pre-commit = "^2.20.0"                      # MIT
+bandit = "^1.7.4"                           # Apache-2.0
+pylint-django = "^2.5.3"                    # GPLv2
+pytest-django = "^4.5.2"                    # BSD-3
+pytest-cov = "^4.0.0"                       # MIT
 
 [build-system]
 requires = ["poetry-core"]
