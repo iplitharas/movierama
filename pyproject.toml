@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "movierama"
 version = "0.1.0"
-description = ""
+description = "Django Movies social sharing platform"
 authors = ["iplitharas"]
 readme = "README.md"
 
