@@ -1,6 +1,8 @@
 # Movierama 🍿📽️ 🎞️
 Movies social sharing platform 
 
+![project](sample_data/readme-imgs/project.png)
+
 ## Table of contents
 1. [Local development](#local-development)
 2. [Local docker development](#local-docker-development)
