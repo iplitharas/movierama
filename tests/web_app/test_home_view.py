@@ -99,3 +99,49 @@ def test_home_with_one_movie_user_logged_in(client, fake_user_with_one_movie):
     # But he can edit/delete it
     assert "Edit" in response_content
     assert "Delete" in response_content
+
+
+@pytest.mark.django_db
+def test_users_can_edit_their_movies(client, fake_user_with_one_movie):
+    """
+    Given a testing client one user with movie
+    When the sure `edits` the movie
+    Then we expecting the `home` page with right content
+    """
+    # Given 1 user with one movie review
+    user, movie = fake_user_with_one_movie
+    url_login = reverse("login")
+    response = client.post(
+        path=url_login, data={"username": user.username, "password": "password123"}
+    )
+    assert response.status_code == http.HTTPStatus.FOUND
+    # When I access the homepage
+    url = reverse("home")
+    response = client.get(url)
+    # Then
+    assert response.status_code == http.HTTPStatus.OK
+    response_content = str(response.content)
+    # All the movie infos are rendered in the page
+    assert movie.title in response_content
+    assert movie.desc in response_content
+    assert movie.genre not in response_content
+    assert movie.year in response_content
+    # Edit the movie
+    edit_url = reverse("update-movie", args=[movie.id])
+    response = client.post(
+        edit_url, data={"title": "New title", "desc": "new", "year": "2023"}
+    )
+    assert response.status_code == http.HTTPStatus.FOUND
+    response = client.get(url)
+    response_content = str(response.content)
+    assert movie.title not in response_content
+    assert "New title" in response_content
+    assert movie.desc not in response_content
+    assert "new" in response_content
+    assert movie.year not in response_content
+    assert "2023" in response_content
+    #
+    movie.refresh_from_db()
+    assert movie.title == "New title"
+    assert movie.desc == "new"
+    assert movie.year == "2023"
