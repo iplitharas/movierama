@@ -106,7 +106,7 @@ def test_users_can_edit_their_movies(client, fake_user_with_one_movie):
     """
     Given a testing client one user with movie
     When the sure `edits` the movie
-    Then we expecting the `home` page with right content
+    Then we're expecting the `home` page with right content
     """
     # Given 1 user with one movie review
     user, movie = fake_user_with_one_movie
