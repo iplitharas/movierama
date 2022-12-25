@@ -110,9 +110,9 @@ def test_users_can_edit_their_movies(client, fake_user_with_one_movie):
     """
     # Given 1 user with one movie review
     user, movie = fake_user_with_one_movie
-    url_login = reverse("login")
+    login_url = reverse("login")
     response = client.post(
-        path=url_login, data={"username": user.username, "password": "password123"}
+        path=login_url, data={"username": user.username, "password": "password123"}
     )
     assert response.status_code == http.HTTPStatus.FOUND
     # When I access the homepage
