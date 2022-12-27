@@ -1,7 +1,4 @@
-import os
-
 import pytest
-from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from movies.models import Movie
@@ -26,6 +23,16 @@ def fake_user_with_one_movie() -> Tuple[Movie, Any]:
         year="2011",
     )
     return user, movie
+
+
+@pytest.fixture()
+def fake_user():
+    User = get_user_model()
+    default_password = "password123"
+    user = User(username="bob")
+    user.set_password(default_password)
+    user.save()
+    return user
 
 
 @pytest.fixture()

@@ -89,7 +89,7 @@ class HomePageView(generic.ListView):
             data.append(temp_data)
             # author users can't like their own movie reviews
             if movie.author.id == self.request.user.id:
-                # users can't add reaction on their movie reviws
+                # users can't add reaction on their movie reviews
                 temp_data.allow_edit = True
                 temp_data.allow_delete = True
                 # like/dislike
@@ -119,17 +119,22 @@ def new_movie(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, author=request.user)
         if form.is_valid():
-            Movie.objects.create(
+
+            movie = Movie.objects.create(
                 author=form.author,
                 title=form.cleaned_data["title"],
                 desc=form.cleaned_data["desc"],
                 genre=form.cleaned_data["genre"],
                 year=form.cleaned_data["year"],
-                cover=request.FILES["cover"],
             )
+            if request.FILES.get("cover"):
+                movie = Movie.objects.get(id=movie.id)
+                movie.cover = request.FILES["cover"]
+                movie.save()
             logger.info("Successfully created the movie")
             return redirect("home")
 
+        logger.info("Cannot create a new movie due to: %s" % form.errors)
     form = MovieForm()
     return render(
         request=request, template_name="movies/new.html", context={"form": form}
@@ -161,7 +166,9 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
                 movie = Movie.objects.get(id=movie.id)
                 movie.cover = request.FILES["cover"]
                 movie.save()
-        logger.info("Successfully updated the movie")
+            logger.info("Successfully updated the movie")
+
+        logger.info("Cannot update a new movie due to: %s" % form.errors)
         return redirect("home")
 
     form = MovieForm(instance=movie)
@@ -198,6 +205,9 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     """
     movie = get_object_or_404(Movie, id=id)
 
+    if request.user == movie.author:
+        return HttpResponse("Unauthorized", status=401)
+
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
@@ -207,7 +217,7 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
             if user.first() in movie.likes.all():
                 movie.likes.remove(user.first())
                 logger.info(
-                    "Reverted like from user: %s for movie %s"
+                    "Revert like from user: %s for movie %s"
                     % (request.user.id, movie.id),
                 )
                 return redirect("home")
@@ -235,6 +245,10 @@ def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
     Dislike function view for handling dislikes from users for one movie.
     """
     movie = get_object_or_404(Movie, id=id)
+
+    if request.user == movie.author:
+        return HttpResponse("Unauthorized", status=401)
+
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
