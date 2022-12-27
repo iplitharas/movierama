@@ -10,14 +10,13 @@ Web-app views using the `Movie` model for:
 import logging
 from dataclasses import dataclass
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
 from accounts.models import CustomUser
 from movies.models import Movie
-from movies.persmissions import IsAuthorOrReadOnly
 
 from .forms import MovieForm
 
