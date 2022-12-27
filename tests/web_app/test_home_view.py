@@ -3,6 +3,8 @@ import http
 import pytest
 from django.urls import reverse
 
+from movies.models import Movie
+
 
 @pytest.mark.django_db
 def test_home_page_title(client):
@@ -145,3 +147,44 @@ def test_users_can_edit_their_movies(client, fake_user_with_one_movie):
     assert movie.title == "New title"
     assert movie.desc == "new"
     assert movie.year == "2023"
+
+
+@pytest.mark.django_db
+def test_users_can_delete_their_movies(client, fake_user_with_one_movie):
+    """
+    Given a testing client one user with movie
+    When the user selects one movie for deletion
+    Then we expect the right content
+    """
+    # Given 1 user with one movie review
+    user, movie = fake_user_with_one_movie
+    login_url = reverse("login")
+    response = client.post(
+        path=login_url, data={"username": user.username, "password": "password123"}
+    )
+    assert response.status_code == http.HTTPStatus.FOUND
+    # When I access the homepage
+    url = reverse("home")
+    response = client.get(url)
+    # Then
+    assert response.status_code == http.HTTPStatus.OK
+    response_content = str(response.content)
+    # All the movie infos are rendered in the page
+    assert movie.title in response_content
+    assert movie.desc in response_content
+    assert movie.genre not in response_content
+    assert movie.year in response_content
+    assert Movie.objects.count() == 1
+    # Edit the movie
+    delete_url = reverse("delete-movie", args=[movie.id])
+    response = client.post(delete_url)
+    assert Movie.objects.count() == 0
+    assert response.status_code == http.HTTPStatus.FOUND
+    response = client.get(url)
+    response_content = str(response.content)
+    assert movie.title not in response_content
+    assert "New title" not in response_content
+    assert movie.desc not in response_content
+    assert "new" not in response_content
+    assert movie.year not in response_content
+    assert "2023" not in response_content

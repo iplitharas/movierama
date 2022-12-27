@@ -18,6 +18,5 @@ class MoveAPICreateView(generics.CreateAPIView):
 
 
 class MovieListAPIList(generics.ListAPIView):
-    # permission_classes = permissions.IsAuthenticated
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
