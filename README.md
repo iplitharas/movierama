@@ -74,13 +74,19 @@ movierama
 
 ## Api docs 
 
-* For interacting with the `API` you can see all the available
-endpoints either from `/swagger` | `/redoc` 
-or from the `django rest-framework` where there is an option for
-easy `login/logout`
+### For interacting with the `API` you can see all the available endpoints either from:
 
-* For examples check: [api-docs-examples](api/api-docs.md)
+  * swagger-docs : `/swagger`
+  * redoc: `/redoc`
+  * django-rest-framework :`api/movies/v1/`
 
-**_NOTE:_** Due to an open-bug to swagger-docs for the `api` it's 
+
+### For examples check: [api-docs-examples](api/api-docs.md)
+
+**_NOTE:_** 
+1. Due to an open-bug to swagger-docs for the `api` it's 
 not possible to `upload` a movie cover. If you want to create a `movie`
 with a movie-cover create a new one from the `homepage`
+2. the `API` endpoints aren't **used** from the templates, instead the
+[web-app-endpoints](https://github.com/iplitharas/movierama/blob/main/web_app/urls.py#L13) are
+used
