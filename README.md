@@ -7,6 +7,7 @@ Movies social sharing platform
 1. [Local development](#local-development)
 2. [Local docker development](#local-docker-development)
 3. [Project folder structure](#project-folder-structure)
+4. [Api-docs](#api-docs)
 
 ### Local development 
 **_NOTE:_**  for local development 💻 the used database is the `sqlite3`
@@ -70,3 +71,16 @@ movierama
     └── templates      # HTML templates
     └── tests          # Pytest test cases
 ```
+
+## Api-docs 
+
+* For interacting with the `API` you can see all the available
+endpoints either from `/swagger` | `/redoc` 
+or from the `django rest-framework` where there is an option for
+easy `login/logout`
+
+* For examples check: [api-docs-examples](api/api-docs.md)
+
+**_NOTE:_** Due to an open-bug to swagger-docs for the `api` it's 
+not possible to `upload` a movie cover. If you want to create a `movie`
+with a movie-cover create a new one from the `homepage`
