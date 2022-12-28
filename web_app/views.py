@@ -211,25 +211,26 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
+            user = user.first()
             # Many-to-Many it's a set
             # user liked this movie review
             # revert it
-            if user.first() in movie.likes.all():
-                movie.likes.remove(user.first())
+            if user in movie.likes.all():
+                movie.likes.remove(user)
                 logger.info(
                     "Revert like from user: %s for movie %s"
                     % (request.user.id, movie.id),
                 )
                 return redirect("home")
 
-            if user.first() not in movie.likes.all():
-                movie.likes.add(user.first())
+            if user not in movie.likes.all():
+                movie.likes.add(user)
                 logger.info(
                     "Added a like from user: %s to movie %s"
                     % (request.user.id, movie.id),
                 )
-            if user.first() in movie.dislikes.all():
-                movie.dislikes.remove(user.first())
+            if user in movie.dislikes.all():
+                movie.dislikes.remove(user)
                 logger.info(
                     "User %s likes movie %s, deleted the dislike"
                     % (request.user.id, movie.id),
@@ -252,23 +253,24 @@ def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
     if request.method == "POST":
         user = CustomUser.objects.filter(pk=request.user.id)
         if user.exists():
-            if user.first() in movie.dislikes.all():
+            user = user.first()
+            if user in movie.dislikes.all():
                 logger.info(
                     "Reverted dislike from user: %s for movie %s"
                     % (request.user.id, movie.id),
                 )
-                movie.dislikes.remove(user.first())
+                movie.dislikes.remove(user)
                 return redirect("home")
 
-            if user.first() not in movie.dislikes.all():
+            if user not in movie.dislikes.all():
                 logger.info(
                     "Added a dislike from user: %s to movie %s"
                     % (request.user.id, movie.id),
                 )
-                movie.dislikes.add(user.first())
+                movie.dislikes.add(user)
 
-            if user.first() in movie.likes.all():
-                movie.likes.remove(user.first())
+            if user in movie.likes.all():
+                movie.likes.remove(user)
                 logger.info(
                     "User %s dislike movie %s, deleted the like"
                     % (request.user.id, movie.id),
