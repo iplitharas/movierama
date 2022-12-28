@@ -6,9 +6,5 @@ from movies.models import Movie
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = "__all__"
-        read_only_fields = (
-            "id",
-            "created_date",
-            "updated_date",
-        )
+        fields = ["title", "desc", "genre", "year", "author", "likes", "dislikes"]
+        read_only_fields = ("id", "created_date", "updated_date", "likes", "dislikes")
