@@ -176,6 +176,8 @@ REST_FRAMEWORK = {
     ],
 }
 
+LOG_FILENAME = "logs/general.log"
+os.makedirs(os.path.dirname(LOG_FILENAME), exist_ok=True)
 
 LOGGING = {
     "version": 1,
