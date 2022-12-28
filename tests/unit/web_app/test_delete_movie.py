@@ -42,7 +42,7 @@ def test_delete_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
             invalid `movie_id`
     Then we expect a `HTTP_NOT_FOUND` response
     """
-    faker_user, movie = fake_user_with_one_movie
+    faker_user, _ = fake_user_with_one_movie
     # Given
     login_user(client=client, user=faker_user)
     assert Movie.objects.count() == 1
@@ -67,13 +67,12 @@ def test_delete_movie_without_permissions(client, fake_users_with_movies):
     """
     users, movies = fake_users_with_movies
     first_user, _ = users
-    first_movie, second_movie = movies
+    _, second_movie = movies
     # Given
     login_user(client=client, user=first_user)
     assert Movie.objects.count() == 2
     # When
     delete_movie_url = reverse("delete-movie", args=[second_movie.id])
-
     response = client.post(
         delete_movie_url,
     )

@@ -1,3 +1,4 @@
+"""Test cases for the web-app home endpoint"""
 import http
 
 import pytest

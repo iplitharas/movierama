@@ -1,3 +1,4 @@
+"""Test cases for the web-app dislike-movie endpoint"""
 import http
 
 import pytest
@@ -18,7 +19,7 @@ def test_dislike_movie_endpoint_first_time(client, fake_users_with_movies, caplo
     caplog.clear()
     users, movies = fake_users_with_movies
     first_user, _ = users
-    first_movie, second_movie = movies
+    _, second_movie = movies
     # Given
     login_user(client=client, user=first_user)
     assert second_movie.total_likes == 0
@@ -47,7 +48,7 @@ def test_dislike_movie_endpoint_second_time(client, fake_users_with_movies, capl
     caplog.clear()
     users, movies = fake_users_with_movies
     first_user, _ = users
-    first_movie, second_movie = movies
+    _, second_movie = movies
     # User has already liked the movie
     second_movie.dislikes.add(first_user)
     assert second_movie.total_likes == 0
@@ -77,7 +78,7 @@ def test_dislike_movie_endpoint_with_a_like(client, fake_users_with_movies, capl
     caplog.clear()
     users, movies = fake_users_with_movies
     first_user, _ = users
-    first_movie, second_movie = movies
+    _, second_movie = movies
     login_user(client=client, user=first_user)
     # User has already liked the movie
     second_movie.likes.add(first_user)
@@ -139,7 +140,7 @@ def test_dislike_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
     Then we expect a `HTTP_NOT_FOUND` response
     """
     # Given
-    fake_user, movie = fake_user_with_one_movie
+    fake_user, _ = fake_user_with_one_movie
     login_user(client=client, user=fake_user)
     assert Movie.objects.count() == 1
     # When

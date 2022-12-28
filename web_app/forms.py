@@ -6,11 +6,15 @@ from django.forms import ModelForm
 from movies.models import Movie
 
 
-class MovieForm(ModelForm):
+class MovieForm(ModelForm):  # pylint: disable=missing-class-docstring
     def __init__(self, *args, **kwargs):
         self.author = kwargs.pop("author", None)
-        super(MovieForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     class Meta:
         model = Movie
-        exclude = ["author", "likes", "dislikes"]
+        exclude = [  # pylint: disable=modelform-uses-exclude
+            "author",
+            "likes",
+            "dislikes",
+        ]

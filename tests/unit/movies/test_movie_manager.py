@@ -13,7 +13,7 @@ def test_get_movies_by_author(fake_user):
     Then I'm expecting only one
     """
     # another user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="test-user")
     user.set_password(default_password)
@@ -31,7 +31,7 @@ def test_get_movies_by_published_date(fake_user):
     Then I'm expecting two movies year by date (descending ordering)
     """
     # another user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="test-user")
     user.set_password(default_password)
@@ -56,7 +56,7 @@ def test_get_movies_by_total_likes(fake_user):
         in ascending order
     """
     # another user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="test-user")
     user.set_password(default_password)
@@ -85,7 +85,7 @@ def test_get_movies_by_total_dislikes(fake_user):
         in ascending order
     """
     # another user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="test-user")
     user.set_password(default_password)

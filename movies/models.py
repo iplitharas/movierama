@@ -5,7 +5,7 @@ from config import settings
 from movies.movie_manager import MovieManager
 
 
-class Movie(models.Model):
+class Movie(models.Model):  # pylint: disable=missing-class-docstring
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(
         verbose_name="Movie Title", max_length=255, help_text="Title of the movie"
@@ -47,7 +47,7 @@ class Movie(models.Model):
     objects = MovieManager()
 
     def __str__(self) -> str:
-        return f"{self.title} by {self.author.username}"
+        return f"{self.title} by {self.author.username}"  # pylint: disable=no-member
 
     @property
     def total_likes(self) -> int:

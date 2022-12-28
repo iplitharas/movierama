@@ -1,3 +1,4 @@
+"""Test cases for the web-app login"""
 import pytest
 from django.contrib.auth import get_user_model
 
@@ -10,7 +11,7 @@ def test_login_with_valid_credentials(client):
     Then I'm expecting `True` from client.login
     """
     # Given a user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "pytest-s3cr3T"
     user = User(username="pytest_user")
     user.set_password(default_password)
@@ -29,7 +30,7 @@ def test_login_with_invalid_credentials(client):
     Then I'm expecting `False` from client.login
     """
     # Given a user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "pytest-s3cr3T"
     user = User(username="pytest_user")
     user.set_password(default_password)

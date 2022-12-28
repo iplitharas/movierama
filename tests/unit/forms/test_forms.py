@@ -26,6 +26,5 @@ def test_movie_form(form_input, expected):
     """
     Make sure the `MovieForm` check the right model fields
     """
-
     movie_form = MovieForm(data=form_input)
     assert movie_form.is_valid() == expected

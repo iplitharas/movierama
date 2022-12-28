@@ -16,7 +16,7 @@ def test_list_movie(client, fake_user_with_one_movie):
     Then we expect the right response content
     """
     # Given
-    user, movie = fake_user_with_one_movie
+    _, movie = fake_user_with_one_movie
     movies = Movie.objects.all()
     assert len(movies) == 1
     # When
