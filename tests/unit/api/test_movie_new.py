@@ -29,9 +29,7 @@ def test_add_new_movie_user_authenticated(client, fake_user_with_one_movie):
             "title": "New movie title",
             "desc": "New movie description",
             "genre": "New genre",
-            "author": faker_user.id,
             "year": "1999",
-            "id": 100,
         },
         content_type="application/json",
     )
@@ -42,7 +40,6 @@ def test_add_new_movie_user_authenticated(client, fake_user_with_one_movie):
         "desc": "New movie description",
         "genre": "New genre",
         "year": "1999",
-        "author": 1,
         "likes": [],
         "dislikes": [],
         "id": movie.id + 1,
@@ -73,7 +70,6 @@ def test_add_new_movie_user_authenticated_update_likes(
             "title": "New movie title",
             "desc": "New movie description",
             "genre": "New genre",
-            "author": faker_user.id,
             "year": "1999",
             "likes": [100],
         },
@@ -86,7 +82,6 @@ def test_add_new_movie_user_authenticated_update_likes(
         "desc": "New movie description",
         "genre": "New genre",
         "year": "1999",
-        "author": 1,
         "likes": [],
         "dislikes": [],
         "id": movie.id + 1,
@@ -95,18 +90,16 @@ def test_add_new_movie_user_authenticated_update_likes(
 
 
 @pytest.mark.django_db
-def test_add_new_movie_user_non_authenticated(client, fake_user_with_one_movie):
+def test_add_new_movie_user_non_authenticated(client):
     """
     Given one movie
     When we call the `api/movies/v1/new` endpoint
         from an non-authenticated user
-    Then we expect the right response and a new movie created
+    Then we expect a `http.HTTPStatus.FORBIDDEN`
     """
     # Given
-    faker_user, movie = fake_user_with_one_movie
-    assert Movie.objects.count() == 1
+    assert Movie.objects.count() == 0
     # When
-    login_user(client=client, user=faker_user)
     api_movies_add_url = reverse("movies-new")
     response = client.post(
         path=api_movies_add_url,
@@ -122,7 +115,5 @@ def test_add_new_movie_user_non_authenticated(client, fake_user_with_one_movie):
         content_type="application/json",
     )
     # Then
-    # @TODO this is wrong
-    assert response.status_code == http.HTTPStatus.BAD_REQUEST
-
-    assert Movie.objects.count() == 1
+    assert response.status_code == http.HTTPStatus.FORBIDDEN
+    assert Movie.objects.count() == 0

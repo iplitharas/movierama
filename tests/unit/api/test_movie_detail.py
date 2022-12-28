@@ -1,3 +1,6 @@
+"""Test cases for the detail view:
+`api/movies/v1/{id}`
+"""
 import http
 
 import pytest
@@ -35,7 +38,6 @@ def test_edit_movie_user_authenticated(client, fake_user_with_one_movie):
         "desc": movie.desc,
         "genre": movie.genre,
         "year": movie.year,
-        "author": movie.author.id,
         "likes": [],
         "dislikes": [],
         "id": movie.id,
@@ -91,7 +93,6 @@ def test_get_movie_user_authenticated(client, fake_user_with_one_movie):
         "desc": movie.desc,
         "genre": movie.genre,
         "year": movie.year,
-        "author": movie.author.id,
         "likes": [],
         "dislikes": [],
         "id": movie.id,
@@ -121,7 +122,6 @@ def test_get_detail_user_non_authenticated_user(client, fake_user_with_one_movie
         "desc": movie.desc,
         "genre": movie.genre,
         "year": movie.year,
-        "author": movie.author.id,
         "likes": [],
         "dislikes": [],
         "id": movie.id,
