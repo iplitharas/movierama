@@ -3,9 +3,9 @@
 ### I want to list all the available `movies`
 
 For checking the available movies perform a `GET` request 
-at `/api/movies/v1/` with a successful response look like:
+at `/api/movies/v1/`
 
-
+Response:
 ```json
 [
   {
@@ -40,7 +40,7 @@ curl -X 'POST' \
 }'
 
 ```
-with a successful response 
+Response: 
 ```json
 {
   "title": "New movie",
@@ -52,7 +52,7 @@ with a successful response
   "id": 65
 }
 ```
-and status-code= `201`
+with status-code= `201`
 **Note**: Only authenticated can access this endpoint.
 
 ### I want to update my existing `movie`
@@ -72,7 +72,7 @@ curl -X 'PATCH' \
 }'
 ```
 
-with a successful response
+Response:
 ```json
 {
   "title": "New title",
@@ -100,7 +100,7 @@ curl -X 'PUT' \
 }'
 ```
 
-will give a response of:
+Response:
 ```json
 {
   "detail": "You do not have permission to perform this action."
@@ -120,14 +120,14 @@ curl -X 'DELETE' \
   -H 'accept: application/json' \
   -H 'X-CSRFToken: YzEirAJU5mkM8vZYAY7KYy3N6sVqSbhFLWUI8dAPmP3osinEEx2tG8ZizB6ydiig
   ```
-and a successful response with `status-code=204`
+Response:  `status-code=204`
 
-Trying to delete a movie from different user  will give a response of:
+Trying to delete a movie from different user  will give a response:
 ```json
 {
   "detail": "You do not have permission to perform this action."
 }
 ```
-and a `status-code=Forbidden`
+status-code:`Forbidden`
 
 **Note**: Only authenticated and author users can access this endpoint.
