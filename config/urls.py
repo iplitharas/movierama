@@ -22,7 +22,7 @@ from rest_framework import permissions
 
 from . import settings
 
-schema_view = get_schema_view(
+schema_view = get_schema_view(  # pylint: disable=invalid-name
     openapi.Info(
         title="Movierama API",
         description="API for movies",
@@ -34,7 +34,6 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-from .views import FacebookLogin, GithubLogin
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -50,8 +49,6 @@ urlpatterns = [
     path(
         "api/v1/dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")
     ),
-    path("api/v1/dj-rest-auth/facebook/", FacebookLogin.as_view(), name="fb_login"),
-    path("api/v1/dj-rest-auth/github/", GithubLogin.as_view(), name="github_login"),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

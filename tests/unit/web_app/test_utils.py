@@ -7,7 +7,9 @@ from web_app.utils import apply_queryset_filtering
 
 
 @pytest.mark.django_db
-def test_apply_queryset_filtering_no_filtering(fake_user_with_one_movie, caplog):
+def test_apply_queryset_filtering_no_filtering(
+    fake_user_with_one_movie, caplog
+):  # pylint: disable=unused-argument)
     """
     Given a HTTP request and one movie
     When the user doesn't specify any filtering
@@ -101,9 +103,7 @@ def test_apply_queryset_filtering_by_dislikes(fake_users_with_movies, caplog):
 
 
 @pytest.mark.django_db
-def test_apply_queryset_filtering_by_current_user(
-    fake_users_with_movies, caplog, client
-):
+def test_apply_queryset_filtering_by_current_user(fake_users_with_movies, caplog):
     """
     Given a `HTTP request` two users with one movie each
     When the user request the results filtered by `by_current_user`
@@ -111,7 +111,7 @@ def test_apply_queryset_filtering_by_current_user(
     """
     # Given
     caplog.clear()
-    users, movies = fake_users_with_movies
+    users, _ = fake_users_with_movies
     factory = RequestFactory()
     # When
     fake_request = factory.get("/?filter=by_current_user")
@@ -125,7 +125,7 @@ def test_apply_queryset_filtering_by_current_user(
 
 
 @pytest.mark.django_db
-def test_apply_queryset_filtering_by_author(fake_users_with_movies, caplog, client):
+def test_apply_queryset_filtering_by_author(fake_users_with_movies, caplog):
     """
     Given a `HTTP request` two users with one movie each
     When the user request the results filtered by `author`
@@ -133,7 +133,7 @@ def test_apply_queryset_filtering_by_author(fake_users_with_movies, caplog, clie
     """
     # Given
     caplog.clear()
-    users, movies = fake_users_with_movies
+    users, _ = fake_users_with_movies
     factory = RequestFactory()
     # When
     fake_request = factory.get(f"/?author={users[0].id}")
