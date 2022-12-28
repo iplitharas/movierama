@@ -1,3 +1,6 @@
+"""Common pytest fixtures"""
+from typing import Any, List, Tuple
+
 import pytest
 from django.contrib.auth import get_user_model
 
@@ -5,12 +8,11 @@ from movies.models import Movie
 
 DEFAULT_ENGINE = "django.db.backends.sqlite3"
 
-from typing import Any, List, Tuple
 
-
-@pytest.fixture()
-def fake_user_with_one_movie() -> Tuple[Movie, Any]:
-    User = get_user_model()
+@pytest.fixture(name="fake_user_with_one_movie")
+def fake_user_with_one_movie_fixture() -> Tuple[Movie, Any]:
+    """pytest fixture for creating one user with one movie"""
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="bob")
     user.set_password(default_password)
@@ -25,9 +27,10 @@ def fake_user_with_one_movie() -> Tuple[Movie, Any]:
     return user, movie
 
 
-@pytest.fixture()
-def fake_user():
-    User = get_user_model()
+@pytest.fixture(name="fake_user")
+def fake_user_fixture():
+    """pytest fixture for creating a fake user"""
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     user = User(username="bob")
     user.set_password(default_password)
@@ -35,20 +38,23 @@ def fake_user():
     return user
 
 
-@pytest.fixture()
-def fake_users_with_movies(fake_user_with_one_movie) -> Tuple[List[Any], List[Movie]]:
+@pytest.fixture(name="fake_users_with_movies")
+def fake_users_with_movies_fixture(
+    fake_user_with_one_movie,
+) -> Tuple[List[Any], List[Movie]]:
+    """pytest fixture for creating two users with one movie each"""
     first_user, first_movie = fake_user_with_one_movie
-
     # Create another user
-    User = get_user_model()
+    User = get_user_model()  # pylint: disable=invalid-name
     default_password = "password123"
     second_user = User(username="alice")
+    second_user.set_password(default_password)
     second_user.save()
-
     second_movie = Movie.objects.create(
         author=second_user,
         title="Fight Club",
-        desc="A depressed man (Edward Norton) suffering from insomnia meets a strange soap salesman named "
+        desc="A depressed man (Edward Norton) suffering from insomnia "
+        "meets a strange soap salesman named "
         "Tyler Durden (Brad Pitt) and soon finds himself living in his squalid "
         "house after his perfect apartment is destroyed. The two bored men form an "
         "underground club with strict rules and fight other men who are fed up with their"
