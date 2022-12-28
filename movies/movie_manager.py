@@ -27,10 +27,10 @@ class MovieManager(models.Manager):
         return MovieQuerySet(self.model, using=self._db)
 
     def by_likes(self):
-        return self.by_likes()
+        return self.get_queryset().by_likes()
 
     def by_dislikes(self):
-        return self.by_dislikes()
+        return self.get_queryset().by_dislikes()
 
     def by_author(self, author: CustomUser):
         return self.get_queryset().by_author(author)
