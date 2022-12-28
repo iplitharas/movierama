@@ -12,8 +12,8 @@ from movies.movie_manager import MovieQuerySet
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class TemplateData:
+@dataclass()
+class TemplateData:  # pylint: disable=missing-class-docstring
     movie: Movie = None
     allow_edit: bool = False
     allow_delete: bool = False
@@ -31,24 +31,24 @@ def apply_queryset_filtering(
 
     if request.GET.get("filter") == "released_date":
         movies = queryset.by_published_date()
-        logger.debug("Filter by `released_date movies` %s" % movies)
+        logger.debug("Filter by `released_date movies` %s", movies)
 
     if request.GET.get("filter") == "likes":
         movies = queryset.by_likes()
-        logger.debug("Filter by `likes` %s" % movies)
+        logger.debug("Filter by `likes` %s", movies)
 
     if request.GET.get("filter") == "dislikes":
         movies = queryset.by_dislikes()
-        logger.debug("Filter by `dislikes` %s" % movies)
+        logger.debug("Filter by `dislikes` %s", movies)
 
     if request.GET.get("filter") == "by_current_user":
         movies = queryset.by_author(author=request.user)
-        logger.debug("Filter `by_current_user` %s movies %s" % (request.user, movies))
+        logger.debug("Filter `by_current_user` %s movies %s", request.user, movies)
 
     if request.GET.get("author"):
         author_id = request.GET.get("author")
         movies = queryset.by_author(author=CustomUser.objects.get(id=author_id))
-        logger.debug("Filter by `author` with id: %s movies %s" % (author_id, movies))
+        logger.debug("Filter by `author` with id: %s movies %s", author_id, movies)
     return movies
 
 
