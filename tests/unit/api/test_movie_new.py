@@ -122,6 +122,7 @@ def test_add_new_movie_user_non_authenticated(client, fake_user_with_one_movie):
         content_type="application/json",
     )
     # Then
+    # @TODO this is wrong
     assert response.status_code == http.HTTPStatus.BAD_REQUEST
 
     assert Movie.objects.count() == 1
