@@ -1,3 +1,4 @@
+"""API URLS"""
 from django.urls import path
 
 from .views import MoveAPICreateView, MovieAPIDetailView, MovieListAPIList

@@ -1,3 +1,5 @@
+"""API views implementation"""
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -7,13 +9,17 @@ from movies.persmissions import IsAuthorOrReadOnly
 from .serializers import MovieAddSerializer, MovieSerializer
 
 
-class MovieAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class MovieAPIDetailView(  # pylint: disable=missing-class-docstring
+    generics.RetrieveUpdateDestroyAPIView
+):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     permission_classes = (IsAuthorOrReadOnly,)
 
 
-class MoveAPICreateView(generics.CreateAPIView):
+class MoveAPICreateView(  # pylint: disable=missing-class-docstring
+    generics.CreateAPIView
+):
     queryset = Movie.objects.all()
     serializer_class = MovieAddSerializer
     permission_classes = (IsAuthenticated,)
@@ -24,6 +30,6 @@ class MoveAPICreateView(generics.CreateAPIView):
         return context
 
 
-class MovieListAPIList(generics.ListAPIView):
+class MovieListAPIList(generics.ListAPIView):  # pylint: disable=missing-class-docstring
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
