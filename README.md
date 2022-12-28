@@ -1,7 +1,7 @@
 # Movierama 🍿📽️ 🎞️
 Movies social sharing platform 
 
-![project](sample_data/readme-imgs/project.png)
+![project](readme-data/project.png)
 
 ## Table of contents
 1. [Local development](#local-development)
