@@ -1,3 +1,5 @@
+"""Test cases for the `api/v1/movies/new"""
+
 import http
 
 import pytest
@@ -29,6 +31,7 @@ def test_add_new_movie_user_authenticated(client, fake_user_with_one_movie):
             "genre": "New genre",
             "author": faker_user.id,
             "year": "1999",
+            "id": 100,
         },
         content_type="application/json",
     )
@@ -42,6 +45,7 @@ def test_add_new_movie_user_authenticated(client, fake_user_with_one_movie):
         "author": 1,
         "likes": [],
         "dislikes": [],
+        "id": movie.id + 1,
     }
     assert Movie.objects.count() == 2
 
@@ -85,6 +89,7 @@ def test_add_new_movie_user_authenticated_update_likes(
         "author": 1,
         "likes": [],
         "dislikes": [],
+        "id": movie.id + 1,
     }
     assert Movie.objects.count() == 2
 

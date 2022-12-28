@@ -1,3 +1,4 @@
+"""Test cases for the `api/v1/movies/"""
 import http
 
 import pytest
