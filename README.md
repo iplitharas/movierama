@@ -7,7 +7,7 @@ Movies social sharing platform
 1. [Local development](#local-development)
 2. [Local docker development](#local-docker-development)
 3. [Project folder structure](#project-folder-structure)
-4. [Api-docs](#api-docs)
+4. [Api docs](#api-docs)
 
 ### Local development 
 **_NOTE:_**  for local development 💻 the used database is the `sqlite3`
@@ -72,7 +72,7 @@ movierama
     └── tests          # Pytest test cases
 ```
 
-## Api-docs 
+## Api docs 
 
 * For interacting with the `API` you can see all the available
 endpoints either from `/swagger` | `/redoc` 

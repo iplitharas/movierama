@@ -35,7 +35,7 @@ makemigrations: ## Run the django makemigrations within the running container
 migrate: ## Run the django migrate command within the running container
 	docker-compose exec movies-app ./manage.py migrate
 
-test-docker:
+test-docker: ## Run the tests within the running container
 	docker-compose exec movies-app pytest . -vv
 
 shell_plus: ## Start django shell command within the running container
@@ -59,7 +59,7 @@ install-hooks: ## Install hooks
 sample-movies: ## Create sample movies
 	source .env/bin/activate && ./manage.py create_sample_movies
 
-init-local-database:
+init-local-database: ## Initialize the local database
 	source .env/bin/activate && ./manage.py makemigrations && ./manage.py migrate
 
 install-local:poetry-env install-hooks init-local-database sample-movies
