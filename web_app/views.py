@@ -8,7 +8,6 @@ Web-app views using the `Movie` model for:
 6) add dislikes to a movie review: `dislike_movie`
 """
 import logging
-from dataclasses import dataclass
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
@@ -19,18 +18,10 @@ from accounts.models import CustomUser
 from movies.models import Movie
 
 from .forms import MovieForm
+from .utils import apply_queryset_filtering, get_template_data
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class TemplateData:
-    movie: Movie = None
-    allow_edit: bool = False
-    allow_delete: bool = False
-    allow_like: bool = False
-    allow_dislike: bool = False
 
 
 class HomePageView(generic.ListView):
@@ -45,69 +36,14 @@ class HomePageView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         """
-        Allows custom filtering on the queryset.
+        Specify the `context/template` data based on
+        custom filter and if users can `edit/delete`
+        or `like/dislike` a movie.
         """
         context = super().get_context_data(**kwargs)
         # First, specify the movies query set
-        movies = self.queryset.all().order_by("id")
-
-        if self.request.GET.get("filter") == "date":
-
-            movies = self.queryset.all().order_by("created_date")
-
-        if self.request.GET.get("filter") == "released_date":
-            movies = self.queryset.by_published_date()
-            logger.debug("Filter by `released_date movies` %s" % movies)
-
-        if self.request.GET.get("filter") == "likes":
-            movies = self.queryset.by_likes()
-            logger.debug("Filter by `likes` %s" % movies)
-
-        if self.request.GET.get("filter") == "dislikes":
-            movies = self.queryset.by_dislikes()
-            logger.debug("Filter by `dislikes` %s" % movies)
-
-        if self.request.GET.get("filter") == "by_current_user":
-            movies = self.queryset.by_author(author=self.request.user)
-            logger.debug(
-                "Filter `by_current_user` %s movies %s" % (self.request.user, movies)
-            )
-
-        if self.request.GET.get("author"):
-            author_id = self.request.GET.get("author")
-            movies = self.queryset.by_author(
-                author=CustomUser.objects.get(id=author_id)
-            )
-            logger.debug(
-                "Filter by `author` with id: %s movies %s" % (author_id, movies)
-            )
-
-        data = []
-        for movie in movies:
-            temp_data = TemplateData()
-            temp_data.movie = movie
-            data.append(temp_data)
-            # author users can't like their own movie reviews
-            if movie.author.id == self.request.user.id:
-                # users can't add reaction on their movie reviews
-                temp_data.allow_edit = True
-                temp_data.allow_delete = True
-                # like/dislike
-                temp_data.allow_like = None
-                temp_data.allow_dislike = None
-            # user has already liked the movie
-            elif self.request.user in movie.likes.all():
-                temp_data.allow_like = False
-                temp_data.allow_dislike = True
-            # user has already dis-liked the movie
-            elif self.request.user in movie.dislikes.all():
-                temp_data.allow_like = True
-                temp_data.allow_dislike = False
-            else:
-                # user hasn't liked or dislike the movie
-                temp_data.allow_like = True
-                temp_data.allow_dislike = True
-        context["data"] = data
+        movies = apply_queryset_filtering(request=self.request, queryset=self.queryset)
+        context["data"] = get_template_data(movies, self.request.user)
         return context
 
 
