@@ -55,7 +55,6 @@ def new_movie(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, author=request.user)
         if form.is_valid():
-
             movie = Movie.objects.create(
                 author=form.author,
                 title=form.cleaned_data["title"],
@@ -70,7 +69,7 @@ def new_movie(request: HttpRequest) -> HttpResponse:
             logger.info("Successfully created the movie")
             return redirect("home")
 
-        logger.info("Cannot create a new movie due to: %s" % form.errors)
+        logger.info("Cannot create a new movie due to: %s", form.errors)
     form = MovieForm()
     return render(
         request=request, template_name="movies/new.html", context={"form": form}
@@ -104,7 +103,7 @@ def update_movie(request: HttpRequest, id: int) -> HttpResponse:
                 movie.save()
             logger.info("Successfully updated the movie")
 
-        logger.info("Cannot update a new movie due to: %s" % form.errors)
+        logger.info("Cannot update a new movie due to: %s", form.errors)
         return redirect("home")
 
     form = MovieForm(instance=movie)
@@ -154,22 +153,25 @@ def like_movie(request: HttpRequest, id: int) -> HttpResponse:
             if user in movie.likes.all():
                 movie.likes.remove(user)
                 logger.info(
-                    "Revert like from user: %s for movie %s"
-                    % (request.user.id, movie.id),
+                    "Revert like from user: %s for movie %s",
+                    request.user.id,
+                    movie.id,
                 )
                 return redirect("home")
 
             if user not in movie.likes.all():
                 movie.likes.add(user)
                 logger.info(
-                    "Added a like from user: %s to movie %s"
-                    % (request.user.id, movie.id),
+                    "Added a like from user: %s to movie %s",
+                    request.user.id,
+                    movie.id,
                 )
             if user in movie.dislikes.all():
                 movie.dislikes.remove(user)
                 logger.info(
-                    "User %s likes movie %s, deleted the dislike"
-                    % (request.user.id, movie.id),
+                    "User %s likes movie %s, deleted the dislike",
+                    request.user.id,
+                    movie.id,
                 )
             movie.save()
     # go to home page in any case
@@ -192,24 +194,27 @@ def dislike_movie(request: HttpRequest, id: int) -> HttpResponse:
             user = user.first()
             if user in movie.dislikes.all():
                 logger.info(
-                    "Reverted dislike from user: %s for movie %s"
-                    % (request.user.id, movie.id),
+                    "Reverted dislike from user: %s for movie %s",
+                    request.user.id,
+                    movie.id,
                 )
                 movie.dislikes.remove(user)
                 return redirect("home")
 
             if user not in movie.dislikes.all():
                 logger.info(
-                    "Added a dislike from user: %s to movie %s"
-                    % (request.user.id, movie.id),
+                    "Added a dislike from user: %s to movie %s",
+                    request.user.id,
+                    movie.id,
                 )
                 movie.dislikes.add(user)
 
             if user in movie.likes.all():
                 movie.likes.remove(user)
                 logger.info(
-                    "User %s dislike movie %s, deleted the like"
-                    % (request.user.id, movie.id),
+                    "User %s dislike movie %s, deleted the like",
+                    request.user.id,
+                    movie.id,
                 )
             movie.save()
     # go to home page in any case

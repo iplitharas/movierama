@@ -69,9 +69,14 @@ test: ## Run locally pytest with coverage
 	pytest -vv -p no:warnings --cov=.
 	echo "🚀🚀"
 
+check: ## Run isort black and pylint in all files
+	isort .
+	black .
+	pylint --recursive=y movierama
+
 .PHONY: help build-dev logs db-logs restart exec dev-up dev-up \
 make-migrations migrate test test-docker shell_plus create-env install-local\
- sample-data-docker install-hooks init-local-database
+ sample-data-docker install-hooks init-local-database check
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
