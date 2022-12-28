@@ -10,6 +10,7 @@ build-dev: ## Build dev docker image
 
 dev-up: ## Start local containers
 	docker-compose up --build  -d
+	echo "Starting development server at http://0.0.0.0:8080/"
 
 dev-down: ## Stop local containers
 	docker-compose down
