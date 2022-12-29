@@ -78,7 +78,7 @@ movierama
 
 ## Api docs 
 
-### For interacting with the API you can see all the available endpoints either from:
+### For interacting with the API you can see all the available endpoints from:
 
   * swagger-docs : `/swagger/`
   * redoc: `/redoc/`
