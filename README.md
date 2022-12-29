@@ -29,14 +29,14 @@ for creating:
 4. Create and run the `migrations`
 5. create sample fake `users/movies`
 
-Start the webserver
+Start the webserver 🐍
 ```bash
 source .env/bin/activate && ./manage.py runserver
 ```
 
-#### To see all the available commands run.
+#### To see all the available 💁 commands run.
 ```bash
-make help 
+make help  
 ```
 #### Run test-cases
 ```bash
@@ -59,7 +59,7 @@ Stop containers
 make dev-down
 ```
 
-### Project folder structure 
+### Project folder structure  
 
 ```
 movierama
@@ -76,14 +76,14 @@ movierama
 
 ### For interacting with the `API` you can see all the available endpoints either from:
 
-  * swagger-docs : `/swagger`
-  * redoc: `/redoc`
-  * django-rest-framework :`api/movies/v1/`
+  * swagger-docs : `/swagger/`
+  * redoc: `/redoc/`
+  * django-rest-framework :`/api/movies/v1/`
 
 
-### For examples check: [api-docs-examples](api/api-docs.md)
+### For examples 📝 check: [api-docs-examples](api/api-docs.md)
 
-**_NOTE:_** 
+**_NOTE:_** ⚠️ ⚠️
 1. Due to an open-bug to swagger-docs for the `api` it's 
 not possible to `upload` a movie cover. If you want to create a `movie`
 with a movie-cover create a new one from the `homepage`
