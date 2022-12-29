@@ -42,8 +42,8 @@ def test_new_movie_success(client, fake_user, caplog):
 def test_new_movie_with_invalid_form_data(client, fake_user, caplog):
     """
     Given one authenticated user without any movie
-    When the user makes a POST request at the  `new-movie`
-    endpoint with some missing mandatory fields
+    When  the user makes a `POST` request at the  `new-movie`
+          endpoint with some missing mandatory fields
     Then we expect an empty new form
     """
     caplog.clear()

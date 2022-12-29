@@ -13,9 +13,10 @@ from tests.utils import login_user
 @pytest.mark.django_db
 def test_edit_movie_user_authenticated(client, fake_user_with_one_movie):
     """
-    Given one movie
+    Given one user with one movie
     When we call the `api/movies/v1/new` endpoint
-        from an authenticated user with a PATCH request
+        from an authenticated user with a `PATCH request`
+        and the right `movie_id`
     Then we expect a `http.HTTPStatus.OK=200`
     """
     # Given
@@ -48,7 +49,7 @@ def test_edit_movie_user_authenticated(client, fake_user_with_one_movie):
 @pytest.mark.django_db
 def test_delete_movie_user_authenticated(client, fake_user_with_one_movie):
     """
-    Given one movie
+    Given one user and one movie
     When we call the `api/movies/v1/new` endpoint
         from an authenticated user with a delete request
     Then we expect a `http.HTTPStatus.NO_CONTENT=204`
@@ -71,9 +72,9 @@ def test_delete_movie_user_authenticated(client, fake_user_with_one_movie):
 @pytest.mark.django_db
 def test_get_movie_user_authenticated(client, fake_user_with_one_movie):
     """
-    Given one movie
-    When we call the `api/movies/v1/new` endpoint
-        from an authenticated user with a GET request
+    Given one user with one movie
+    When we call the `api/movies/v1/<int>` endpoint
+          from an authenticated user with a GET request
     Then we expect a `http.HTTPStatus.OK=200`
     """
     # Given
@@ -134,7 +135,7 @@ def test_edit_detail_user_non_authenticated_user(client, fake_user_with_one_movi
     """
     Given an non-authenticated user
     When we try to access the `api/movies/v1/{id}
-        with a `PATCH` request
+          with a `PATCH` request
     THEN we expect an `HTTPStatus.FORBIDDEN`
     """
     # Given
@@ -155,12 +156,13 @@ def test_delete_detail_user_non_authenticated_user(client, fake_user_with_one_mo
     """
     Given an non-authenticated user
     When we try to access the `api/movies/v1/{id} with
-        a DELETE request
+         a `DELETE request`
     THEN we expect a `.HTTPStatus.FORBIDDEN`
     """
     # Given
     _, movie = fake_user_with_one_movie
     api_movies_detail_url = reverse("movies-detail", args=[movie.id])
+    assert Movie.objects.count() == 1
     # When
     response = client.patch(
         path=api_movies_detail_url,

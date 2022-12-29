@@ -14,7 +14,7 @@ from tests.utils import login_user
 def test_update_movie_success(client, fake_user_with_one_movie, caplog):
     """
     Given one authenticated user with a movie
-    When the user POSTS at the `update-movie` endpoint
+    When the user makes a `POST` request  at the `update-movie` endpoint
     Then we expect the movie to be updated
     """
     caplog.clear()
@@ -25,7 +25,6 @@ def test_update_movie_success(client, fake_user_with_one_movie, caplog):
     assert movie.title == "Harry Potter and the Deathly Hallows: Part 2"
     # When
     update__movie_url = reverse("update-movie", args=[movie.id])
-
     response = client.post(
         update__movie_url,
         data={
@@ -47,8 +46,8 @@ def test_update_movie_success(client, fake_user_with_one_movie, caplog):
 def test_update_movie_with_invalid_form(client, fake_user_with_one_movie, caplog):
     """
     Given one authenticated user with a movie
-    When the user makes a POST request at the `update-movie` endpoint
-        with an invalid form
+    When the user makes a `POST request` at the `update-movie` endpoint
+         with an invalid form
     Then we expect a redirect to the `home-page`
     """
     caplog.clear()
@@ -59,7 +58,6 @@ def test_update_movie_with_invalid_form(client, fake_user_with_one_movie, caplog
     assert movie.title == "Harry Potter and the Deathly Hallows: Part 2"
     # When
     update__movie_url = reverse("update-movie", args=[movie.id])
-
     response = client.post(
         update__movie_url,
         data={
@@ -81,8 +79,8 @@ def test_update_movie_with_invalid_form(client, fake_user_with_one_movie, caplog
 def test_update_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
     """
     Given one authenticated user with a movie
-    When the user POSTS at the `update-movie` endpoint with a
-        invalid movie_id
+    When the user makes a `POST request`
+         at the `update-movie` endpoint with an invalid movie_id
     Then we expect a `HTTP_NOT_FOUND` response
     """
     fake_user, _ = fake_user_with_one_movie
@@ -91,7 +89,6 @@ def test_update_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
     assert Movie.objects.count() == 1
     # When
     update__movie_url = reverse("update-movie", args=[99999])
-
     response = client.post(
         update__movie_url,
         data={
@@ -109,9 +106,8 @@ def test_update_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
 def test_update_movie_without_permissions(client, fake_users_with_movies):
     """
     Given one authenticated user with a movie
-    When the user POSTS at the `update-movie` endpoint with a
-        valid movie_id but without permissions
-        needs to be the author
+    When the user makes a `POST request` at the `update-movie` endpoint with a
+        valid `movie_id` but without permissions needs to be the author
     Then we expect a `HTTP_NOT_FOUND` response
     """
     users, movies = fake_users_with_movies
@@ -122,7 +118,6 @@ def test_update_movie_without_permissions(client, fake_users_with_movies):
     assert Movie.objects.count() == 2
     # When
     update_movie_url = reverse("update-movie", args=[second_movie.id])
-
     response = client.post(
         update_movie_url,
         data={
@@ -140,7 +135,7 @@ def test_update_movie_without_permissions(client, fake_users_with_movies):
 def test_update_movie_non_authenticated_user(client, fake_user_with_one_movie):
     """
     Given a non-authenticated user
-    When we try a POST request at the `update-movie` endpoint
+    When we try a `POST request` at the `update-movie` endpoint
     Then we expect a redirection to the `login` home page.
     """
     _, movie = fake_user_with_one_movie

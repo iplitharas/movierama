@@ -1,5 +1,5 @@
 """
-Test cases for the `delete-movie` endpoint.
+Test cases for the `delete-movie` web-app endpoint.
 """
 import http
 
@@ -19,8 +19,8 @@ def test_delete_movie_success(client, fake_user_with_one_movie, caplog):
     Then we expect the movie to be deleted
     """
     caplog.clear()
-    faker_user, movie = fake_user_with_one_movie
     # Given
+    faker_user, movie = fake_user_with_one_movie
     login_user(client=client, user=faker_user)
     assert Movie.objects.count() == 1
     # When
@@ -37,18 +37,17 @@ def test_delete_movie_success(client, fake_user_with_one_movie, caplog):
 @pytest.mark.django_db
 def test_delete_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
     """
-    Given one authenticated user with a movie
-    When the user makes a POST request at the `delete-movie` endpoint with a
+    Given one authenticated user with one movie
+    When the user makes a `POST` request at the `delete-movie` endpoint with a
             invalid `movie_id`
     Then we expect a `HTTP_NOT_FOUND` response
     """
-    faker_user, _ = fake_user_with_one_movie
     # Given
+    faker_user, _ = fake_user_with_one_movie
     login_user(client=client, user=faker_user)
     assert Movie.objects.count() == 1
     # When
     delete_movie_url = reverse("delete-movie", args=[99999])
-
     response = client.post(
         delete_movie_url,
     )
@@ -59,33 +58,37 @@ def test_delete_movie_with_wrong_movie_id(client, fake_user_with_one_movie):
 @pytest.mark.django_db
 def test_delete_movie_without_permissions(client, fake_users_with_movies):
     """
-    Given one authenticated user with a movie
-    When the user makes POST request at the `delete-movie` endpoint with a
-        valid movie_id but without permissions
+    Given one authenticated user with one movie
+    When the user makes a `POST` request at the `delete-movie` endpoint
+         with a valid movie_id but without permissions
         (needs to be the author)
-    Then we expect a `HTTP_NOT_FOUND` response
+    Then we expect a `UNAUTHORIZED` response
     """
+    # Given
     users, movies = fake_users_with_movies
     first_user, _ = users
     _, second_movie = movies
-    # Given
     login_user(client=client, user=first_user)
     assert Movie.objects.count() == 2
     # When
+    # `first_user` has permission for deletion only on the
+    # `first_movie`
     delete_movie_url = reverse("delete-movie", args=[second_movie.id])
     response = client.post(
         delete_movie_url,
     )
     # Then
     assert response.status_code == http.HTTPStatus.UNAUTHORIZED
+    assert Movie.objects.count() == 2
 
 
 @pytest.mark.django_db
 def test_delete_movie_non_authenticated_user(client, fake_user_with_one_movie):
     """
     Given a non-authenticated user
-    When we try a POST request at the `delete-movie` endpoint
-    Then we expect a redirection to the `login` home page.
+    When we try a `POST` request at the `delete-movie` endpoint
+    Then we expect a redirection to the `login` home page without
+    a successful deletion.
     """
     _, movie = fake_user_with_one_movie
     assert Movie.objects.count() == 1
@@ -94,23 +97,23 @@ def test_delete_movie_non_authenticated_user(client, fake_user_with_one_movie):
     response = client.post(update_movie_url)
     # Then
     assert response.status_code == http.HTTPStatus.FOUND
+    assert Movie.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_delete_movie_get_request(client, fake_user_with_one_movie, caplog):
     """
-    Given one authenticated user without any movie
+    Given one authenticated user with one movie
     When the user calls the `delete-movie` endpoint with a `GET`
     Then we expect an empty new form.
     """
+    # Given
     fake_user, movie = fake_user_with_one_movie
     caplog.clear()
-    # Given
     login_user(client=client, user=fake_user)
     assert Movie.objects.count() == 1
     # When
     delete_movie_url = reverse("delete-movie", args=[movie.id])
-
     response = client.get(delete_movie_url)
     # Then
     assert response.status_code == http.HTTPStatus.OK

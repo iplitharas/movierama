@@ -8,7 +8,7 @@ def test_login_with_valid_credentials(client):
     """
     Given a testing client
     When I log in with the right credentials
-    Then I'm expecting `True` from client.login
+    Then I'm expecting `True` from the `client.login`
     """
     # Given a user
     User = get_user_model()  # pylint: disable=invalid-name
@@ -27,7 +27,7 @@ def test_login_with_invalid_credentials(client):
     """
     Given a testing client
     When I log in with the wrong credentials
-    Then I'm expecting `False` from client.login
+    Then I'm expecting `False` from `client.login`
     """
     # Given a user
     User = get_user_model()  # pylint: disable=invalid-name

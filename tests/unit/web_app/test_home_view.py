@@ -9,11 +9,14 @@ from django.urls import reverse
 def test_home_page_title(client):
     """
     Given a testing client
-    When I call the home page
+    When I call the `home page`
     Then I'm expecting the home page with the right title
     """
+    # Given
     url = reverse("home")
+    # When
     response = client.get(url)
+    # Then
     assert response.status_code == http.HTTPStatus.OK
     # verify the right templates are rendered
     assert response.template_name == ["movies/home.html", "movies/movie_list.html"]
@@ -28,8 +31,11 @@ def test_home_without_a_user_logged(client):
     Then I'm expecting the `Login` && `Signup` in the content of
     the `home` page
     """
+    # Given
     url = reverse("home")
+    # When
     response = client.get(url)
+    # Then
     assert response.status_code == http.HTTPStatus.OK
     assert "Login" in str(response.content)
     assert "Signup" in str(response.content)
