@@ -6,7 +6,7 @@
 ############# Docker commands ####################################################
 
 build-dev: ## Build dev docker image
-	docker build -f ./Dockerfile --tag web-app:dev .
+	docker build -f ./Dockerfile --tag web-app:dev . --target test
 
 dev-up: ## Start local containers
 	docker-compose up --build  -d
