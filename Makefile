@@ -42,7 +42,7 @@ test-docker: ## Run the tests within the running container
 shell_plus: ## Start django shell command within the running container
 	docker-compose exec movies-app ./manage.py shell_plus
 
-sample-movies-docker: ## Create sample movies within the running container
+sample-movies-docker:makemigrations migrate  ## Create sample movies within the running container
 	docker-compose exec movies-app ./manage.py create_sample_movies
 
 #########################################################################################

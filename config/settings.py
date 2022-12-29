@@ -52,11 +52,7 @@ INSTALLED_APPS = [
     # "django-allauth",
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
     "dj_rest_auth.registration",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.facebook",
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -176,6 +172,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+################ LOGGING #######################
 LOG_FILENAME = "logs/general.log"
 os.makedirs(os.path.dirname(LOG_FILENAME), exist_ok=True)
 

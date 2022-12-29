@@ -50,6 +50,10 @@ Install pre-commit hooks
 ```bash
 make install-hooks
 ```
+Create migrations, migrate and create sample data
+```bash
+make sample-movies-docker
+```
 Start containers 
 ```bash
 make dev-up
@@ -81,9 +85,9 @@ movierama
   * django-rest-framework :`/api/movies/v1/`
 
 
-### For examples 📝 check: [api-docs-examples](api/api-docs.md)
+### For examples check: [api-docs-examples](api/api-docs.md) 
 
-**_NOTE:_** ⚠️ ⚠️
+**_NOTE:_** ⚠️
 1. Due to an open-bug to swagger-docs for the `api` it's 
 not possible to `upload` a movie cover. If you want to create a `movie`
 with a movie-cover create a new one from the `homepage`
