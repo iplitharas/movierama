@@ -2,6 +2,7 @@
 {% block title %} Edit Movie {% endblock title %}
 {% block content %}
 {% load crispy_forms_tags %}
+
 <h1> Edit Movie</h1>
     <form method="post" action="{% url 'update-movie' id=id %}" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
