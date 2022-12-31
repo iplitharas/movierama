@@ -21,7 +21,7 @@ Run the following command:
 ```bash
 make install-local
 ```
-[![asciicast](https://asciinema.org/a/ZdKV1pTjJUU6nd7O7KRrYgZeF.svg)](https://asciinema.org/a/ZdKV1pTjJUU6nd7O7KRrYgZeF)
+[![asciicast](https://asciinema.org/a/kjzG3hapztEXstV4RsK8udHuh.svg)](https://asciinema.org/a/kjzG3hapztEXstV4RsK8udHuh)
 for creating:
 1. new `python venv`: `.env`
 2. install the dependencies using `poetry`
